@@ -4,17 +4,57 @@
              xmlns:vm="clr-namespace:AppMMR.ViewModels"
              x:DataType="vm:TagFormViewModel"
              x:Class="AppMMR.Pages.TagFormPage"
-             Title="TagFormPage">
+             Title="编辑标签"
+             BackgroundColor="{StaticResource White}">
 
-    <NavigationPage.TitleView>
-        <Slider HeightRequest="44"
-                WidthRequest="300" />
-    </NavigationPage.TitleView>
-    <VerticalStackLayout>
-        <Label Text="名称"></Label>
-        <Entry Text="{Binding TagData.Name}" Placeholder="请输入名称"></Entry>
-        <Label Text="状态"></Label>
-        <Switch IsToggled="{Binding TagData.Active}"></Switch>
-        <Button Text="保存" Command="{Binding SaveTagCommand}"></Button>
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*,Auto"
+          Padding="20"
+          RowSpacing="20">
+
+        <!-- 表单区域 -->
+        <VerticalStackLayout Grid.Row="0" 
+                            Spacing="20">
+            <!-- 名称输入区域 -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="名称"
+                       TextColor="{StaticResource Gray600}"
+                       FontSize="14"/>
+                <Entry Text="{Binding TagData.Name}" 
+                       Placeholder="请输入标签名称"
+                       PlaceholderColor="{StaticResource Gray400}"
+                       TextColor="{StaticResource Gray900}"
+                       FontSize="16"
+                       HeightRequest="44"/>
+            </VerticalStackLayout>
+
+            <!-- 状态切换区域 -->
+            <Grid ColumnDefinitions="*, Auto" 
+                  ColumnSpacing="15">
+                <Label Text="启用状态"
+                       VerticalOptions="Center"
+                       TextColor="{StaticResource Gray600}"
+                       FontSize="14"/>
+                <Switch Grid.Column="1"
+                        IsToggled="{Binding TagData.Active}"
+                        OnColor="{StaticResource Primary}"
+                        ThumbColor="{StaticResource White}"
+                        VerticalOptions="Center"/>
+            </Grid>
+        </VerticalStackLayout>
+
+        <!-- 占位空间 -->
+        <BoxView Grid.Row="1" 
+                 Color="Transparent"/>
+
+        <!-- 保存按钮 -->
+        <Button Grid.Row="2"
+                Text="保存"
+                Command="{Binding SaveTagCommand}"
+                BackgroundColor="{StaticResource Primary}"
+                TextColor="{StaticResource White}"
+                FontSize="16"
+                HeightRequest="50"
+                CornerRadius="4"
+                Margin="0,0,0,20"/>
+    </Grid>
 </ContentPage>

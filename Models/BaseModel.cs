@@ -1,9 +1,20 @@
-﻿namespace AppMMR.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace AppMMR.Models;
+public class BaseModel
 {
-    public class BaseModel
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
+
+    [Required] public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+    public DateTime DateModified { get; set; } = DateTime.UtcNow;
+
+    public bool Validate(out List<ValidationResult> results)
     {
-        public int Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        var context = new ValidationContext(this);
+        results = [];
+        return Validator.TryValidateObject(this, context, results, true);
     }
 }

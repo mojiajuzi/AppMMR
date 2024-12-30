@@ -8,16 +8,16 @@
     Title="AppMMR">
 
     <TabBar>
-        <Tab Title="Home" Icon="house.svg">
+        <Tab Title="首页" Icon="house.svg">
             <ShellContent ContentTemplate="{DataTemplate views:HomePage}" />
         </Tab>
-        <Tab Title="Work" Icon="list.svg">
+        <Tab Title="项目" Icon="list.svg">
             <ShellContent ContentTemplate="{DataTemplate views:WorkPage}"/>
         </Tab>
-        <Tab Title="Contact" Icon="address_book.svg">
+        <Tab Title="联系人" Icon="address_book.svg">
             <ShellContent ContentTemplate="{DataTemplate views:ContactPage}" />
         </Tab>
-        <Tab Title="Tag" Icon="tag.svg">
+        <Tab Title="标签" Icon="tag.svg">
             <ShellContent ContentTemplate="{DataTemplate views:TagPage}" />
         </Tab>
     </TabBar>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AppMMR</string>
+    <string name="title_activity_main">AppMMR</string>
+    <string name="add">添加</string>
+    <string name="edit">编辑</string>
+    <string name="no_tags">暂无标签</string>
+    <string name="tag_management">标签管理</string>
+    <string name="tag_edit">编辑标签</string>
+    <string name="save">保存</string>
+    <string name="tag_name">名称</string>
+    <string name="tag_status">启用状态</string>
+    <string name="tag_name_hint">请输入标签名称</string>
+</resources> 

@@ -53,5 +53,27 @@ namespace AppMMR.ViewModels
                 System.Diagnostics.Debug.WriteLine($"导航失败: {ex.Message}");
             }
         }
+
+        [RelayCommand]
+        private async Task UpdateTag(TagModel tag)
+        {
+            if (tag == null) return;
+            
+            try
+            {
+                var page = _serviceProvider.GetRequiredService<TagFormPage>();
+                var viewModel = page.BindingContext as TagFormViewModel;
+                if (viewModel != null)
+                {
+                    viewModel.TagData = tag;
+                }
+                await Navigation.PushModalAsync(page);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"导航失败: {ex.Message}");
+                // 可以添加用户提示
+            }
+        }
     }
 }
