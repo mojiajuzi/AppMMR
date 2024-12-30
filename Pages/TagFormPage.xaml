@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AppMMR.ViewModels"
+             x:DataType="vm:TagFormViewModel"
+             x:Class="AppMMR.Pages.TagFormPage"
+             Title="TagFormPage">
+
+    <NavigationPage.TitleView>
+        <Slider HeightRequest="44"
+                WidthRequest="300" />
+    </NavigationPage.TitleView>
+    <VerticalStackLayout>
+        <Label Text="名称"></Label>
+        <Entry Text="{Binding TagData.Name}" Placeholder="请输入名称"></Entry>
+        <Label Text="状态"></Label>
+        <Switch IsToggled="{Binding TagData.Active}"></Switch>
+        <Button Text="保存" Command="{Binding SaveTagCommand}"></Button>
+    </VerticalStackLayout>
+</ContentPage>

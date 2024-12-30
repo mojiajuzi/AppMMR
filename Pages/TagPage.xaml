@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AppMMR.ViewModels"
+             xmlns:model="clr-namespace:AppMMR.Models"
+             x:DataType="vm:TagViewModel"
+             x:Class="AppMMR.Pages.TagPage"
+             Title="TagPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddTagCommand}" IconImageSource="{FontImage Glyph='+', Color=Black, Size=22}"/>
+    </ContentPage.ToolbarItems>
+    <VerticalStackLayout>
+        <CollectionView ItemsSource="{Binding Tags}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type model:TagModel}">
+                    <Grid ColumnDefinitions="*,*,auto">
+                        <Label Grid.Column="0" Text="{Binding Name}">
+                        </Label>
+                        <Switch IsToggled="{Binding Active}">
+                        </Switch>
+
+                        <HorizontalStackLayout Grid.Column="2">
+                            <Button Text="Edit"></Button>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>
