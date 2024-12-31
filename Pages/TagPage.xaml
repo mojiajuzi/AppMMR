@@ -8,20 +8,41 @@
              Title="标签管理"
              BackgroundColor="{StaticResource Gray100}">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="添加"
-                     Command="{Binding AddTagCommand}"
-                     IconImageSource="{FontImage Glyph='+', 
-                                    Size=22,
-                                    Color={StaticResource Primary}}"/>
-    </ContentPage.ToolbarItems>
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto,*,Auto" 
+              Padding="0,0,10,0">
+            <!-- 搜索栏 -->
+            <SearchBar Grid.Column="1"
+                      x:Name="searchBar"
+                      Placeholder="搜索标签..."
+                      PlaceholderColor="{StaticResource Gray400}"
+                      TextColor="{StaticResource Gray900}"
+                      BackgroundColor="Transparent"
+                      HorizontalOptions="Fill"
+                      Margin="10,0"
+                      Text="{Binding SearchText}"
+                      SearchCommand="{Binding PerformSearchCommand}"
+                      SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"/>
+
+            <!-- 添加按钮 -->
+            <Button Grid.Column="2"
+                    Text="添加"
+                    Command="{Binding AddTagCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Primary}"
+                    FontSize="14"
+                    Padding="10,0"
+                    HeightRequest="36"
+                    VerticalOptions="Center"/>
+        </Grid>
+    </Shell.TitleView>
 
     <Grid RowDefinitions="*" 
-          Padding="20"
-          BackgroundColor="{StaticResource Gray100}">
+          Padding="20">
 
-        <CollectionView ItemsSource="{Binding Tags}"
-                       Margin="0,10">
+        <!-- 标签列表 -->
+        <CollectionView ItemsSource="{Binding SearchResults}"
+                       Margin="0,5">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:TagModel}">
                     <Frame Margin="0,6" 
