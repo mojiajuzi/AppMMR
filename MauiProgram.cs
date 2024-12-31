@@ -29,6 +29,14 @@ namespace AppMMR
                 options.UseSqlite($"Filename={dbPath};Foreign Keys=False");
             }, ServiceLifetime.Scoped);
 
+
+            //联系人相关
+            builder.Services.AddTransient<ContactFormViewModel>();
+            builder.Services.AddTransient<ContactFormPage>();
+            builder.Services.AddTransient<ContactPage>();
+            builder.Services.AddTransient<ContactViewModel>();
+
+            //标签相关
             builder.Services.AddTransient<TagFormViewModel>();
             builder.Services.AddTransient<TagFormPage>();
             builder.Services.AddTransient<TagViewModel>();

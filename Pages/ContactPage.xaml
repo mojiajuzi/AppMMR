@@ -1,12 +1,172 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AppMMR.ViewModels"
+             xmlns:model="clr-namespace:AppMMR.Models"
+             x:DataType="vm:ContactViewModel"
              x:Class="AppMMR.Pages.ContactPage"
-             Title="ContactPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="联系人"
+             BackgroundColor="{StaticResource Gray100}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="Auto,*,Auto" 
+              Padding="0,0,10,0">
+            <!-- 搜索栏 -->
+            <SearchBar Grid.Column="1"
+                      x:Name="searchBar"
+                      Placeholder="搜索联系人..."
+                      PlaceholderColor="{StaticResource Gray400}"
+                      TextColor="{StaticResource Gray900}"
+                      BackgroundColor="Transparent"
+                      HorizontalOptions="Fill"
+                      Margin="10,0"
+                      Text="{Binding SearchText}"
+                      SearchCommand="{Binding PerformSearchCommand}"
+                      SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"/>
+
+            <!-- 添加按钮 -->
+            <Button Grid.Column="2"
+                    Text="添加"
+                    Command="{Binding AddContactCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Primary}"
+                    FontSize="14"
+                    Padding="10,0"
+                    HeightRequest="36"
+                    VerticalOptions="Center"/>
+        </Grid>
+    </Shell.TitleView>
+
+    <Grid RowDefinitions="*" 
+          Padding="20">
+        <!-- 联系人列表 -->
+        <CollectionView ItemsSource="{Binding SearchResults}"
+                       Margin="0,5">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type model:ContactModel}">
+                    <Frame Margin="0,6" 
+                           Padding="16"
+                           BackgroundColor="{StaticResource White}"
+                           BorderColor="Transparent"
+                           CornerRadius="8"
+                           HasShadow="True">
+                        <Grid RowDefinitions="Auto,Auto,Auto"
+                              RowSpacing="12">
+                            <!-- 第一行：名称和状态 -->
+                            <Grid Grid.Row="0" 
+                                  ColumnDefinitions="*, Auto"
+                                  ColumnSpacing="15">
+                                <Label Grid.Column="0" 
+                                       Text="{Binding Name}"
+                                       VerticalOptions="Center"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource Gray900}"/>
+
+                                <Switch Grid.Column="1"
+                                        IsToggled="{Binding Active}"
+                                        OnColor="{StaticResource Primary}"
+                                        ThumbColor="{StaticResource White}"
+                                        VerticalOptions="Center"/>
+                            </Grid>
+
+                            <!-- 第二行：联系方式 -->
+                            <VerticalStackLayout Grid.Row="1" 
+                                               Spacing="8"
+                                               IsVisible="{Binding Phone, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                <!-- 手机号 -->
+                                <Grid ColumnDefinitions="Auto,*" 
+                                      ColumnSpacing="8"
+                                      IsVisible="{Binding Phone, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                    <Label Grid.Column="0"
+                                           Text="手机："
+                                           TextColor="{StaticResource Gray600}"
+                                           FontSize="14"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Phone}"
+                                           TextColor="{StaticResource Primary}"
+                                           FontSize="14">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ContactViewModel}}, Path=MakePhoneCallCommand}"
+                                                     CommandParameter="{Binding Phone}"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                                
+                                <!-- 邮箱 -->
+                                <Grid ColumnDefinitions="Auto,*" 
+                                      ColumnSpacing="8"
+                                      IsVisible="{Binding Email, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                    <Label Grid.Column="0"
+                                           Text="邮箱："
+                                           TextColor="{StaticResource Gray600}"
+                                           FontSize="14"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Email}"
+                                           TextColor="{StaticResource Primary}"
+                                           FontSize="14">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ContactViewModel}}, Path=SendEmailCommand}"
+                                                     CommandParameter="{Binding Email}"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                                
+                                <!-- 微信 -->
+                                <Grid ColumnDefinitions="Auto,*" 
+                                      ColumnSpacing="8"
+                                      IsVisible="{Binding Wechat, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                    <Label Grid.Column="0"
+                                           Text="微信："
+                                           TextColor="{StaticResource Gray600}"
+                                           FontSize="14"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Wechat}"
+                                           TextColor="{StaticResource Gray900}"
+                                           FontSize="14"/>
+                                </Grid>
+                            </VerticalStackLayout>
+
+                            <!-- 第三行：操作按钮 -->
+                            <Grid Grid.Row="2"
+                                  ColumnDefinitions="*,*"
+                                  ColumnSpacing="12">
+                                <!-- 查看按钮 -->
+                                <Button Grid.Column="0"
+                                        Text="查看"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ContactViewModel}}, Path=ViewContactCommand}"
+                                        CommandParameter="{Binding}"
+                                        BackgroundColor="{StaticResource Gray200}"
+                                        TextColor="{StaticResource Gray900}"
+                                        FontSize="14"
+                                        HeightRequest="36"
+                                        CornerRadius="4"/>
+                                
+                                <!-- 编辑按钮 -->
+                                <Button Grid.Column="1"
+                                        Text="编辑"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ContactViewModel}}, Path=UpdateContactCommand}"
+                                        CommandParameter="{Binding}"
+                                        BackgroundColor="{StaticResource Primary}"
+                                        TextColor="{StaticResource White}"
+                                        FontSize="14"
+                                        HeightRequest="36"
+                                        CornerRadius="4"/>
+                            </Grid>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" 
+                                   VerticalOptions="Center">
+                    <Label Text="暂无联系人"
+                           TextColor="{StaticResource Gray400}"
+                           FontSize="16"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
 </ContentPage>
