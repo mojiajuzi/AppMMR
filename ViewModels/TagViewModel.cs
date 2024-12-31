@@ -48,7 +48,10 @@ namespace AppMMR.ViewModels
             }
         }
 
-        partial void OnSearchText
+        partial void OnSearchTextChanged(string value)
+        {
+            PerformSearch(value);
+        }
 
         [RelayCommand]
         private void PerformSearch(string query)
