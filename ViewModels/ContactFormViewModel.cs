@@ -31,6 +31,14 @@ namespace AppMMR.ViewModels
             LoadTags();
         }
 
+        partial void OnContactDataChanged(ContactModel value)
+        {
+            if (value != null)
+            {
+                LoadTags();
+            }
+        }
+
         private void LoadTags()
         {
             try
@@ -45,14 +53,18 @@ namespace AppMMR.ViewModels
 
                 if (ContactData.Id > 0)
                 {
-                    // 加载已选择的标签
                     var selectedTagIds = _dbContext.ContactTags
+                        .AsNoTracking()
                         .Where(ct => ct.ContactId == ContactData.Id)
                         .Select(ct => ct.TagId)
                         .ToList();
 
                     SelectedTags = new ObservableCollection<TagModel>(
                         tags.Where(t => selectedTagIds.Contains(t.Id)));
+                }
+                else
+                {
+                    SelectedTags = new ObservableCollection<TagModel>();
                 }
             }
             catch (Exception ex)

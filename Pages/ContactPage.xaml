@@ -72,8 +72,7 @@
 
                             <!-- 第二行：联系方式 -->
                             <VerticalStackLayout Grid.Row="1" 
-                                               Spacing="8"
-                                               IsVisible="{Binding Phone, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                               Spacing="8">
                                 <!-- 手机号 -->
                                 <Grid ColumnDefinitions="Auto,*" 
                                       ColumnSpacing="8"
@@ -112,18 +111,34 @@
                                     </Label>
                                 </Grid>
                                 
-                                <!-- 微信 -->
+                                <!-- 标签 -->
                                 <Grid ColumnDefinitions="Auto,*" 
                                       ColumnSpacing="8"
-                                      IsVisible="{Binding Wechat, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                      IsVisible="{Binding ContactTags.Count, Converter={StaticResource IntegerNotZeroConverter}, ConverterParameter=0}">
                                     <Label Grid.Column="0"
-                                           Text="微信："
+                                           Text="标签："
                                            TextColor="{StaticResource Gray600}"
                                            FontSize="14"/>
-                                    <Label Grid.Column="1"
-                                           Text="{Binding Wechat}"
-                                           TextColor="{StaticResource Gray900}"
-                                           FontSize="14"/>
+                                    <CollectionView Grid.Column="1"
+                                                   ItemsSource="{Binding ContactTags}"
+                                                   HeightRequest="24">
+                                        <CollectionView.ItemsLayout>
+                                            <LinearItemsLayout Orientation="Horizontal"
+                                                     ItemSpacing="8"/>
+                                        </CollectionView.ItemsLayout>
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate x:DataType="model:ContactTagModel">
+                                                <Frame Padding="8,2"
+                                                       BackgroundColor="{StaticResource Primary}"
+                                                       CornerRadius="4"
+                                                       HasShadow="False">
+                                                    <Label Text="{Binding Tag.Name}"
+                                                           TextColor="White"
+                                                           FontSize="12"/>
+                                                </Frame>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
                                 </Grid>
                             </VerticalStackLayout>
 
