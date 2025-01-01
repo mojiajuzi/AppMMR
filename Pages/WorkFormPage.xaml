@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AppMMR.ViewModels"
+             xmlns:model="clr-namespace:AppMMR.Models"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="vm:WorkFormViewModel"
+             x:Class="AppMMR.Pages.WorkFormPage"
+             Title="编辑项目"
+             BackgroundColor="{StaticResource Gray100}">
+
+    <Grid RowDefinitions="*,Auto">
+        <!-- 主要内容区域使用 ScrollView -->
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="20" 
+                               Spacing="20">
+                <!-- 基本信息卡片 -->
+                <Frame BackgroundColor="White"
+                       Padding="20"
+                       HasShadow="True"
+                       BorderColor="Transparent">
+                    <VerticalStackLayout Spacing="16">
+                        <!-- 名称输入 -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="项目名称"
+                                   TextColor="{StaticResource Gray600}"
+                                   FontSize="14"/>
+                            <Entry Text="{Binding WorkData.Name}" 
+                                   Placeholder="请输入项目名称"
+                                   PlaceholderColor="{StaticResource Gray400}"
+                                   TextColor="{StaticResource Gray900}"
+                                   FontSize="16"/>
+                        </VerticalStackLayout>
+
+                        <!-- 描述输入 -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="项目描述"
+                                   TextColor="{StaticResource Gray600}"
+                                   FontSize="14"/>
+                            <Editor Text="{Binding WorkData.Description}" 
+                                   Placeholder="请输入项目描述"
+                                   PlaceholderColor="{StaticResource Gray400}"
+                                   TextColor="{StaticResource Gray900}"
+                                   AutoSize="TextChanges"
+                                   MaxLength="250"
+                                   FontSize="16"/>
+                        </VerticalStackLayout>
+
+                        <!-- 起止时间 -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="起止时间"
+                                   TextColor="{StaticResource Gray600}"
+                                   FontSize="14"/>
+                            <Grid ColumnDefinitions="*,Auto,*" 
+                                  ColumnSpacing="8">
+                                <DatePicker Grid.Column="0"
+                                          Date="{Binding WorkData.StartAt}"
+                                          Format="yyyy/MM/dd"
+                                          TextColor="{StaticResource Gray900}"
+                                          FontSize="16"/>
+                                <Label Grid.Column="1"
+                                       Text="-"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                                <DatePicker Grid.Column="2"
+                                          Date="{Binding WorkData.EndAt}"
+                                          Format="yyyy/MM/dd"
+                                          TextColor="{StaticResource Gray900}"
+                                          FontSize="16"/>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                        <!-- 项目金额 -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="项目金额"
+                                   TextColor="{StaticResource Gray600}"
+                                   FontSize="14"/>
+                            <Entry Text="{Binding WorkData.Funds}" 
+                                   Placeholder="请输入项目金额"
+                                   PlaceholderColor="{StaticResource Gray400}"
+                                   TextColor="{StaticResource Gray900}"
+                                   Keyboard="Numeric"
+                                   FontSize="16"/>
+                        </VerticalStackLayout>
+
+                        <!-- 项目状态 -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="项目状态"
+                                   TextColor="{StaticResource Gray600}"
+                                   FontSize="14"/>
+                            <Picker ItemsSource="{Binding StatusList}"
+                                    SelectedItem="{Binding WorkData.Status}"
+                                    ItemDisplayBinding="{Binding Converter={StaticResource WorkStatusConverter}}"
+                                    TextColor="{StaticResource Gray900}"
+                                    FontSize="16"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- 标签选择卡片 -->
+                <Frame BackgroundColor="White"
+                       Padding="20"
+                       HasShadow="True"
+                       BorderColor="Transparent">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="标签"
+                               TextColor="{StaticResource Gray600}"
+                               FontSize="14"/>
+
+                        <!-- 标签搜索 -->
+                        <SearchBar Placeholder="搜索标签..."
+                                  Text="{Binding TagSearchText}"
+                                  PlaceholderColor="{StaticResource Gray400}"
+                                  TextColor="{StaticResource Gray900}"
+                                  BackgroundColor="Transparent"/>
+
+                        <!-- 已选标签 -->
+                        <CollectionView ItemsSource="{Binding SelectedTags}"
+                                      HeightRequest="40"
+                                      EmptyView="未选择标签">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" 
+                                                 ItemSpacing="8"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:TagModel">
+                                    <Frame Padding="8,4"
+                                           BackgroundColor="{StaticResource Primary}"
+                                           CornerRadius="4"
+                                           HasShadow="False">
+                                        <Label Text="{Binding Name}"
+                                               TextColor="White"
+                                               FontSize="12"/>
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkFormViewModel}}, Path=ToggleTagCommand}"
+                                                        CommandParameter="{Binding .}"/>
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <!-- 可选标签列表 -->
+                        <CollectionView ItemsSource="{Binding AvailableTags}"
+                                      HeightRequest="120">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical"
+                                               Span="3"
+                                               VerticalItemSpacing="8"
+                                               HorizontalItemSpacing="8"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:TagModel">
+                                    <Frame Padding="8,4"
+                                           BackgroundColor="{StaticResource Gray100}"
+                                           CornerRadius="4"
+                                           HasShadow="False">
+                                        <Label Text="{Binding Name}"
+                                               TextColor="{StaticResource Gray900}"
+                                               FontSize="14"
+                                               HorizontalOptions="Center"/>
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkFormViewModel}}, Path=ToggleTagCommand}"
+                                                        CommandParameter="{Binding .}"/>
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- 联系人选择卡片 -->
+                <Frame BackgroundColor="White"
+                       Padding="20"
+                       HasShadow="True"
+                       BorderColor="Transparent">
+                    <!-- 联系人选择部分的实现将在后续添加 -->
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- 保存按钮固定在底部 -->
+        <Button Grid.Row="1"
+                Text="保存"
+                Command="{Binding SaveWorkCommand}"
+                BackgroundColor="{StaticResource Primary}"
+                TextColor="White"
+                FontSize="16"
+                HeightRequest="50"
+                CornerRadius="4"
+                Margin="20"/>
+    </Grid>
+</ContentPage>

@@ -1,39 +1,19 @@
-﻿namespace AppMMR.Models.Enums;
+﻿using System.ComponentModel;
 
-public enum WorkStatusEnum
+namespace AppMMR.Models.Enums
 {
-    /// <summary>
-    /// 未开始
-    /// </summary>
-    PreStart,
+    public enum WorkStatusEnum
+    {
+        [Description("未开始")]
+        PreStart = 0,
 
-    /// <summary>
-    /// 已开始
-    /// </summary>
-    Start,
+        [Description("进行中")]
+        InProgress = 1,
 
-    /// <summary>
-    /// 进行中
-    /// </summary>
-    Running,
+        [Description("已完成")]
+        Completed = 2,
 
-    /// <summary>
-    /// 已结束
-    /// </summary>
-    End,
-
-    /// <summary>
-    /// 验收中
-    /// </summary>
-    Acceptance,
-
-    /// <summary>
-    /// 已取消
-    /// </summary>
-    Cancel,
-
-    /// <summary>
-    /// 已归档
-    /// </summary>
-    Archive
+        [Description("已取消")]
+        Cancelled = 3
+    }
 }
