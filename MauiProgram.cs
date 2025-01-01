@@ -29,6 +29,22 @@ namespace AppMMR
                 options.UseSqlite($"Filename={dbPath};Foreign Keys=False");
             }, ServiceLifetime.Scoped);
 
+            //项目详情相关    
+            builder.Services.AddTransient<WorkPaymentFormViewModel>();
+            builder.Services.AddTransient<WorkPaymentFormPage>();
+
+            builder.Services.AddTransient<WorkContactFormViewModel>();
+            builder.Services.AddTransient<WorkContactFormPage>();
+
+            builder.Services.AddTransient<WorkContactViewModel>();
+            builder.Services.AddTransient<WorkContactPage>();
+
+            builder.Services.AddTransient<WorkPaymentViewModel>();
+            builder.Services.AddTransient<WorkPaymentPage>();
+
+            builder.Services.AddTransient<WorkDetailViewModel>();
+            builder.Services.AddTransient<WorkDetailPage>();
+
             //项目相关
             builder.Services.AddTransient<WorkFormViewModel>();
             builder.Services.AddTransient<WorkFormPage>();
