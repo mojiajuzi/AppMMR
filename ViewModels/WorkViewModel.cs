@@ -129,9 +129,24 @@ namespace AppMMR.ViewModels
         }
 
         [RelayCommand]
-        private async Task ViewWork()
+        private async Task ViewWork(WorkModel work)
         {
-            await Navigation.PushModalAsync(_serviceProvider.GetRequiredService<WorkTabPage>());
+            if (work == null) return;
+
+            try
+            {
+                var page = _serviceProvider.GetRequiredService<WorkTabPage>();
+                var viewModel = page.BindingContext as WorkTabViewModel;
+                if (viewModel != null)
+                {
+                    viewModel.LoadWork(work);
+                }
+                await Navigation.PushModalAsync(page);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"导航失败: {ex.Message}");
+            }
         }
 
 

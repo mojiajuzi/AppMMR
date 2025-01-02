@@ -2,11 +2,110 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:AppMMR.ViewModels"
+             xmlns:model="clr-namespace:AppMMR.Models"
+             x:DataType="vm:WorkContactViewModel"
              x:Class="AppMMR.Pages.WorkContactPage"
              Title="相关联系人">
-    <ScrollView>
-        <VerticalStackLayout Padding="20">
-            <!-- 联系人列表内容 -->
-        </VerticalStackLayout>
-    </ScrollView>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- 添加按钮 -->
+        <Button Grid.Row="0"
+                Text="添加联系人"
+                Command="{Binding AddContactCommand}"
+                BackgroundColor="{StaticResource Primary}"
+                TextColor="White"
+                FontSize="14"
+                HeightRequest="40"
+                CornerRadius="4"
+                Margin="20"/>
+
+        <!-- 联系人列表 -->
+        <CollectionView Grid.Row="1"
+                       ItemsSource="{Binding WorkContacts}"
+                       Margin="20,0,20,20">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:WorkContactModel">
+                    <Frame Margin="0,6" 
+                           Padding="16"
+                           BackgroundColor="White"
+                           BorderColor="Transparent"
+                           CornerRadius="8"
+                           HasShadow="True">
+                        <Grid RowDefinitions="Auto,Auto"
+                              RowSpacing="12">
+                            <!-- 联系人信息 -->
+                            <Grid Grid.Row="0" 
+                                  ColumnDefinitions="*, Auto"
+                                  ColumnSpacing="15">
+                                <Label Grid.Column="0" 
+                                       Text="{Binding Contact.Name}"
+                                       VerticalOptions="Center"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource Gray900}"/>
+
+                                <Switch Grid.Column="1"
+                                        IsToggled="{Binding Contact.Active}"
+                                        OnColor="{StaticResource Primary}"
+                                        ThumbColor="{StaticResource White}"
+                                        VerticalOptions="Center"/>
+                            </Grid>
+
+                            <!-- 联系方式 -->
+                            <VerticalStackLayout Grid.Row="1" 
+                                               Spacing="8">
+                                <!-- 手机号 -->
+                                <Grid ColumnDefinitions="Auto,*" 
+                                      ColumnSpacing="8"
+                                      IsVisible="{Binding Contact.Phone, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                    <Label Grid.Column="0"
+                                           Text="手机："
+                                           TextColor="{StaticResource Gray600}"
+                                           FontSize="14"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Contact.Phone}"
+                                           TextColor="{StaticResource Primary}"
+                                           FontSize="14">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkContactViewModel}}, Path=MakePhoneCallCommand}"
+                                                                 CommandParameter="{Binding Contact.Phone}"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+
+                                <!-- 邮箱 -->
+                                <Grid ColumnDefinitions="Auto,*" 
+                                      ColumnSpacing="8"
+                                      IsVisible="{Binding Contact.Email, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                    <Label Grid.Column="0"
+                                           Text="邮箱："
+                                           TextColor="{StaticResource Gray600}"
+                                           FontSize="14"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Contact.Email}"
+                                           TextColor="{StaticResource Primary}"
+                                           FontSize="14">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkContactViewModel}}, Path=SendEmailCommand}"
+                                                                 CommandParameter="{Binding Contact.Email}"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" 
+                                   VerticalOptions="Center">
+                    <Label Text="暂无联系人"
+                           TextColor="{StaticResource Gray400}"
+                           FontSize="16"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
 </ContentPage>

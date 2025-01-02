@@ -1,4 +1,5 @@
-﻿using AppMMR.Pages;
+﻿using AppMMR.Models;
+using AppMMR.Pages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 
@@ -44,6 +45,21 @@ namespace AppMMR.ViewModels
                     PageContent = paymentPage.Content
                 }
             };
+        }
+
+        public void LoadWork(WorkModel work)
+        {
+            var detailPage = _serviceProvider.GetRequiredService<WorkDetailPage>();
+            var contactPage = _serviceProvider.GetRequiredService<WorkContactPage>();
+            var paymentPage = _serviceProvider.GetRequiredService<WorkPaymentPage>();
+
+            // 设置工作数据
+            (detailPage.BindingContext as WorkDetailViewModel)?.LoadWork(work.Id);
+            (contactPage.BindingContext as WorkContactViewModel)?.LoadWorkContacts(work.Id);
+            (paymentPage.BindingContext as WorkPaymentViewModel)?.LoadWorkPayments(work.Id);
+
+            // 更新选项卡
+            InitializeTabs();
         }
     }
 }

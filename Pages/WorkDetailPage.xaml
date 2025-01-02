@@ -15,18 +15,7 @@
                     <!-- 项目名称 -->
                     <Grid ColumnDefinitions="Auto,*" 
                           ColumnSpacing="8">
-                        <Label Grid.Column="0"
-                               Text="项目名称："
-                               TextColor="{StaticResource Gray600}"
-                               FontSize="14"/>
-                        <Label Grid.Column="1"
-                               Text="{Binding WorkName}"
-                               TextColor="{StaticResource Gray900}"
-                               FontSize="14"/>
                     </Grid>
-
-                    <!-- 其他项目信息 -->
-                    <!-- ... -->
                 </VerticalStackLayout>
             </Frame>
         </VerticalStackLayout>
