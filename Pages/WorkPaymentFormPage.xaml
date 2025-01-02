@@ -1,12 +1,101 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AppMMR.ViewModels"
+             x:DataType="vm:WorkPaymentFormViewModel"
              x:Class="AppMMR.Pages.WorkPaymentFormPage"
-             Title="WorkPaymentFormPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="添加收支记录">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- 联系人选择 -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="关联联系人"
+                       TextColor="{StaticResource Gray900}"
+                       FontSize="14"/>
+                <Picker ItemsSource="{Binding AvailableContacts}"
+                        SelectedItem="{Binding SelectedContact}"
+                        ItemDisplayBinding="{Binding Name}"
+                        Title="请选择联系人"/>
+            </VerticalStackLayout>
+
+            <!-- 收支类型 -->
+            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="15">
+                <Label Grid.Column="0"
+                       Text="收支类型"
+                       TextColor="{StaticResource Gray900}"
+                       FontSize="14"
+                       VerticalOptions="Center"/>
+                <Switch Grid.Column="1"
+                        IsToggled="{Binding IsIncome}"
+                        OnColor="{StaticResource Primary}"
+                        ThumbColor="{StaticResource White}"/>
+                <Label Grid.Column="1"
+                       Text="{Binding IsIncome, Converter={StaticResource BoolToIncomeTypeConverter}}"
+                       TextColor="{StaticResource Gray600}"
+                       FontSize="12"
+                       Margin="0,0,50,0"
+                       VerticalOptions="Center"/>
+            </Grid>
+
+            <!-- 金额 -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="金额"
+                       TextColor="{StaticResource Gray900}"
+                       FontSize="14"/>
+                <Entry Text="{Binding Amount}"
+                       Keyboard="Numeric"
+                       Placeholder="请输入金额"/>
+            </VerticalStackLayout>
+
+            <!-- 发票 -->
+            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="15">
+                <Label Grid.Column="0"
+                       Text="是否开具发票"
+                       TextColor="{StaticResource Gray900}"
+                       FontSize="14"
+                       VerticalOptions="Center"/>
+                <Switch Grid.Column="1"
+                        IsToggled="{Binding HasInvoice}"
+                        OnColor="{StaticResource Primary}"
+                        ThumbColor="{StaticResource White}"/>
+            </Grid>
+
+            <!-- 日期 -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="收支日期"
+                       TextColor="{StaticResource Gray900}"
+                       FontSize="14"/>
+                <DatePicker Date="{Binding PaymentDate}"
+                           Format="yyyy-MM-dd"/>
+            </VerticalStackLayout>
+
+            <!-- 备注 -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="备注"
+                       TextColor="{StaticResource Gray900}"
+                       FontSize="14"/>
+                <Editor Text="{Binding Remark}"
+                        HeightRequest="100"
+                        Placeholder="请输入备注信息"/>
+            </VerticalStackLayout>
+
+            <!-- 按钮 -->
+            <Grid ColumnDefinitions="*,*" 
+                  ColumnSpacing="20"
+                  Margin="0,20,0,0">
+                <Button Grid.Column="0"
+                        Text="取消"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="{StaticResource Gray200}"
+                        TextColor="{StaticResource Gray900}"/>
+                
+                <Button Grid.Column="1"
+                        Text="保存"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"/>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

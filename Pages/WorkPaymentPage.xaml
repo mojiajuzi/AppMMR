@@ -2,11 +2,136 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:AppMMR.ViewModels"
+             xmlns:model="clr-namespace:AppMMR.Models"
+             x:DataType="vm:WorkPaymentViewModel"
              x:Class="AppMMR.Pages.WorkPaymentPage"
              Title="收支记录">
-    <ScrollView>
-        <VerticalStackLayout>
-            <!-- 收支记录内容 -->
-        </VerticalStackLayout>
-    </ScrollView>
+
+    <Grid RowDefinitions="Auto,Auto,*">
+        <!-- 统计信息 -->
+        <Grid Grid.Row="0" 
+              Margin="20,10"
+              ColumnDefinitions="*,*,*"
+              ColumnSpacing="15">
+            <VerticalStackLayout Grid.Column="0">
+                <Label Text="总收入"
+                       TextColor="{StaticResource Gray600}"
+                       FontSize="12"/>
+                <Label Text="{Binding TotalIncome, StringFormat='{0:C}'}"
+                       TextColor="{StaticResource Danger}"
+                       FontSize="16"
+                       FontAttributes="Bold"/>
+            </VerticalStackLayout>
+            
+            <VerticalStackLayout Grid.Column="1">
+                <Label Text="总支出"
+                       TextColor="{StaticResource Gray600}"
+                       FontSize="12"/>
+                <Label Text="{Binding TotalExpense, StringFormat='{0:C}'}"
+                       TextColor="{StaticResource Success}"
+                       FontSize="16"
+                       FontAttributes="Bold"/>
+            </VerticalStackLayout>
+            
+            <VerticalStackLayout Grid.Column="2">
+                <Label Text="结余"
+                       TextColor="{StaticResource Gray600}"
+                       FontSize="12"/>
+                <Label Text="{Binding Balance, StringFormat='{0:C}'}"
+                       TextColor="{StaticResource Primary}"
+                       FontSize="16"
+                       FontAttributes="Bold"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- 添加按钮 -->
+        <Button Grid.Row="1"
+                Text="添加收支"
+                Command="{Binding AddPaymentCommand}"
+                BackgroundColor="{StaticResource Primary}"
+                TextColor="White"
+                FontSize="14"
+                HeightRequest="40"
+                CornerRadius="4"
+                Margin="20"/>
+
+        <!-- 收支列表 -->
+        <CollectionView Grid.Row="2"
+                       ItemsSource="{Binding WorkPayments}"
+                       Margin="20,0,20,20">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:WorkPaymentModel">
+                    <Frame Margin="0,6" 
+                           Padding="16"
+                           BackgroundColor="White"
+                           BorderColor="Transparent"
+                           CornerRadius="8"
+                           HasShadow="True">
+                        <Grid RowDefinitions="Auto,Auto"
+                              RowSpacing="12">
+                            <!-- 收支信息 -->
+                            <Grid Grid.Row="0" 
+                                  ColumnDefinitions="*, Auto, Auto"
+                                  ColumnSpacing="15">
+                                <VerticalStackLayout Grid.Column="0" 
+                                                   Spacing="4">
+                                    <Label Text="{Binding Contact.Name}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource Gray900}"/>
+                                    <Label Text="{Binding Contact.Email}"
+                                           FontSize="12"
+                                           TextColor="{StaticResource Gray600}"
+                                           IsVisible="{Binding Contact.Email, Converter={StaticResource StringNotNullOrEmptyConverter}}"/>
+                                </VerticalStackLayout>
+
+                                <Label Grid.Column="1"
+                                       Text="{Binding Amount, StringFormat='{0:C}'}"
+                                       TextColor="{Binding IsIncome, Converter={StaticResource BoolToColorConverter}}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
+
+                                <Button Grid.Column="2"
+                                        Text="编辑"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkPaymentViewModel}}, Path=EditPaymentCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="{StaticResource Primary}"
+                                        TextColor="White"
+                                        FontSize="12"
+                                        HeightRequest="30"
+                                        WidthRequest="50"
+                                        Padding="0"
+                                        CornerRadius="4"/>
+                            </Grid>
+
+                            <!-- 备注和日期 -->
+                            <Grid Grid.Row="1" 
+                                  ColumnDefinitions="*, Auto"
+                                  IsVisible="{Binding Remark, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                <Label Grid.Column="0"
+                                       Text="{Binding Remark}"
+                                       TextColor="{StaticResource Gray600}"
+                                       FontSize="14"/>
+                                <Label Grid.Column="1"
+                                       Text="{Binding PaymentDate, StringFormat='{0:yyyy-MM-dd}'}"
+                                       TextColor="{StaticResource Gray400}"
+                                       FontSize="12"/>
+                            </Grid>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" 
+                                   VerticalOptions="Center">
+                    <Label Text="暂无收支记录"
+                           TextColor="{StaticResource Gray400}"
+                           FontSize="16"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
 </ContentPage>
