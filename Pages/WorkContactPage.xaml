@@ -44,11 +44,12 @@
                                        FontAttributes="Bold"
                                        TextColor="{StaticResource Gray900}"/>
 
-                                <Switch Grid.Column="1"
-                                        IsToggled="{Binding Contact.Active}"
-                                        OnColor="{StaticResource Primary}"
-                                        ThumbColor="{StaticResource White}"
-                                        VerticalOptions="Center"/>
+                                <Label Grid.Column="1"
+                                       Text="{Binding Amount, StringFormat='{0:C}'}"
+                                       TextColor="{Binding IsCome, Converter={StaticResource BoolToColorConverter}}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
                             </Grid>
 
                             <!-- 联系方式 -->

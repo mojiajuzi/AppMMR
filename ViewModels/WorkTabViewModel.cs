@@ -8,58 +8,31 @@ namespace AppMMR.ViewModels
     public partial class WorkTabViewModel : ObservableObject
     {
         [ObservableProperty]
-        private ObservableCollection<TabItemViewModel> tabItems;
+        private WorkDetailViewModel detailViewModel;
 
-        private readonly IServiceProvider _serviceProvider;
+        [ObservableProperty]
+        private WorkContactViewModel contactViewModel;
 
-        public WorkTabViewModel(IServiceProvider serviceProvider)
+        [ObservableProperty]
+        private WorkPaymentViewModel paymentViewModel;
+
+        public WorkTabViewModel(
+            WorkDetailViewModel detailViewModel,
+            WorkContactViewModel contactViewModel,
+            WorkPaymentViewModel paymentViewModel)
         {
-            _serviceProvider = serviceProvider;
-            InitializeTabs();
-        }
-
-        private void InitializeTabs()
-        {
-            var detailPage = _serviceProvider.GetRequiredService<WorkDetailPage>();
-            var contactPage = _serviceProvider.GetRequiredService<WorkContactPage>();
-            var paymentPage = _serviceProvider.GetRequiredService<WorkPaymentPage>();
-
-            TabItems = new ObservableCollection<TabItemViewModel>
-            {
-                new TabItemViewModel
-                {
-                    Title = "项目详情",
-                    Icon = "info.png",
-                    PageContent = detailPage.Content
-                },
-                new TabItemViewModel
-                {
-                    Title = "相关联系人",
-                    Icon = "contacts.png",
-                    PageContent = contactPage.Content
-                },
-                new TabItemViewModel
-                {
-                    Title = "收支记录",
-                    Icon = "payment.png",
-                    PageContent = paymentPage.Content
-                }
-            };
+            DetailViewModel = detailViewModel;
+            ContactViewModel = contactViewModel;
+            PaymentViewModel = paymentViewModel;
         }
 
         public void LoadWork(WorkModel work)
         {
-            var detailPage = _serviceProvider.GetRequiredService<WorkDetailPage>();
-            var contactPage = _serviceProvider.GetRequiredService<WorkContactPage>();
-            var paymentPage = _serviceProvider.GetRequiredService<WorkPaymentPage>();
+            if (work == null) return;
 
-            // 设置工作数据
-            (detailPage.BindingContext as WorkDetailViewModel)?.LoadWork(work.Id);
-            (contactPage.BindingContext as WorkContactViewModel)?.LoadWorkContacts(work.Id);
-            (paymentPage.BindingContext as WorkPaymentViewModel)?.LoadWorkPayments(work.Id);
-
-            // 更新选项卡
-            InitializeTabs();
+            DetailViewModel.LoadWork(work.Id);
+            ContactViewModel.LoadWorkContacts(work.Id);
+            PaymentViewModel.LoadWorkPayments(work.Id);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AppMMR.Entities;
 using AppMMR.Models;
+using AppMMR.Pages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace AppMMR.ViewModels
     {
         private readonly AppDbContext _dbContext;
         private readonly IServiceProvider _serviceProvider;
+        private INavigation Navigation => Application.Current?.MainPage?.Navigation;
 
         [ObservableProperty]
         private ObservableCollection<WorkContactModel> workContacts;
@@ -48,7 +50,29 @@ namespace AppMMR.ViewModels
         [RelayCommand]
         private async Task AddContact()
         {
-            // 添加联系人的实现
+            try
+            {
+                var page = _serviceProvider.GetRequiredService<WorkContactFormPage>();
+                var viewModel = page.BindingContext as WorkContactFormViewModel;
+                if (viewModel != null)
+                {
+                    viewModel.WorkId = this.WorkId;
+                    System.Diagnostics.Debug.WriteLine($"Setting WorkId in form: {this.WorkId}");
+                }
+
+                await Navigation.PushModalAsync(page);
+
+                // 订阅页面消失事件以刷新数据
+                page.Disappearing += (s, e) =>
+                {
+                    LoadWorkContacts(WorkId);
+                };
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"导航失败: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("错误", "导航失败，请重试", "确定");
+            }
         }
 
         [RelayCommand]

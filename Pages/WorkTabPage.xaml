@@ -5,14 +5,10 @@
             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
             x:DataType="vm:WorkTabViewModel"
             android:TabbedPage.ToolbarPlacement="Bottom"
-            x:Class="AppMMR.Pages.WorkTabPage"
-            ItemsSource="{Binding TabItems}">
+            x:Class="AppMMR.Pages.WorkTabPage">
 
-    <TabbedPage.ItemTemplate>
-        <DataTemplate x:DataType="vm:TabItemViewModel">
-            <ContentPage Title="{Binding Title}"
-                         IconImageSource="dotnet_bot.png"
-                         Content="{Binding PageContent}"/>
-        </DataTemplate>
-    </TabbedPage.ItemTemplate>
+    <TabbedPage.Children>
+        <!-- 子页面将在代码后台动态添加 -->
+    </TabbedPage.Children>
+
 </TabbedPage>

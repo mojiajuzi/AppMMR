@@ -7,5 +7,6 @@ namespace AppMMR.ViewModels
         public string Title { get; set; }
         public string Icon { get; set; }
         public View PageContent { get; set; }
+        public object PageViewModel { get; set; }
     }
 } 
