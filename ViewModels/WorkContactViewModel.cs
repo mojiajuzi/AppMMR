@@ -110,5 +110,37 @@ namespace AppMMR.ViewModels
                 System.Diagnostics.Debug.WriteLine($"发送邮件失败: {ex.Message}");
             }
         }
+
+        [RelayCommand]
+        private async Task EditContact(WorkContactModel workContact)
+        {
+            try
+            {
+                var page = _serviceProvider.GetRequiredService<WorkContactFormPage>();
+                var viewModel = page.BindingContext as WorkContactFormViewModel;
+                if (viewModel != null)
+                {
+                    viewModel.WorkId = this.WorkId;
+                    viewModel.IsEdit = true;
+                    viewModel.EditingContact = workContact;
+                    viewModel.SelectedContact = workContact.Contact;
+                    viewModel.IsCome = workContact.IsCome;
+                    viewModel.Amount = workContact.Amount;
+                }
+
+                await Navigation.PushModalAsync(page);
+
+                // 订阅页面消失事件以刷新数据
+                page.Disappearing += (s, e) =>
+                {
+                    LoadWorkContacts(WorkId);
+                };
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"导航失败: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("错误", "导航失败，请重试", "确定");
+            }
+        }
     }
 }

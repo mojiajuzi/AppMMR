@@ -28,6 +28,12 @@ namespace AppMMR.ViewModels
         [ObservableProperty]
         private int workId;
 
+        [ObservableProperty]
+        private bool isEdit;
+
+        [ObservableProperty]
+        private WorkContactModel editingContact;
+
         public WorkContactFormViewModel(AppDbContext dbContext, IServiceProvider serviceProvider)
         {
             _dbContext = dbContext;
@@ -64,29 +70,45 @@ namespace AppMMR.ViewModels
                     return;
                 }
 
-                // 检查是否已存在
-                var exists = await _dbContext.WorkContacts
-                    .AnyAsync(wc => wc.WorkId == WorkId && wc.ContactId == SelectedContact.Id);
-
-                if (exists)
+                if (IsEdit)
                 {
-                    await Application.Current.MainPage.DisplayAlert("提示", "该联系人已添加到项目中", "确定");
-                    return;
+                    // 更新现有记录
+                    if (EditingContact != null)
+                    {
+                        EditingContact.ContactId = SelectedContact.Id;
+                        EditingContact.IsCome = IsCome;
+                        EditingContact.Amount = Amount;
+                        EditingContact.DateModified = DateTime.Now;
+
+                        _dbContext.WorkContacts.Update(EditingContact);
+                    }
+                }
+                else
+                {
+                    // 检查是否已存在
+                    var exists = await _dbContext.WorkContacts
+                        .AnyAsync(wc => wc.WorkId == WorkId && wc.ContactId == SelectedContact.Id);
+
+                    if (exists)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("提示", "该联系人已添加到项目中", "确定");
+                        return;
+                    }
+
+                    // 创建新记录
+                    var workContact = new WorkContactModel
+                    {
+                        WorkId = WorkId,
+                        ContactId = SelectedContact.Id,
+                        IsCome = IsCome,
+                        Amount = Amount,
+                        CreateTime = DateTime.Now,
+                        DateModified = DateTime.Now
+                    };
+
+                    _dbContext.WorkContacts.Add(workContact);
                 }
 
-                // 创建新的 WorkContact，不要设置导航属性
-                var workContact = new WorkContactModel
-                {
-                    WorkId = WorkId,
-                    ContactId = SelectedContact.Id,
-                    IsCome = IsCome,
-                    Amount = Amount,
-                    CreateTime = DateTime.Now,
-                    DateModified = DateTime.Now
-                };
-
-                // 添加并保存
-                _dbContext.WorkContacts.Add(workContact);
                 await _dbContext.SaveChangesAsync();
                 await Navigation.PopModalAsync();
             }

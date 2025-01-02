@@ -35,7 +35,7 @@
                               RowSpacing="12">
                             <!-- 联系人信息 -->
                             <Grid Grid.Row="0" 
-                                  ColumnDefinitions="*, Auto"
+                                  ColumnDefinitions="*, Auto, Auto"
                                   ColumnSpacing="15">
                                 <Label Grid.Column="0" 
                                        Text="{Binding Contact.Name}"
@@ -50,6 +50,18 @@
                                        FontSize="16"
                                        FontAttributes="Bold"
                                        VerticalOptions="Center"/>
+
+                                <Button Grid.Column="2"
+                                        Text="编辑"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:WorkContactViewModel}}, Path=EditContactCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="{StaticResource Primary}"
+                                        TextColor="White"
+                                        FontSize="12"
+                                        HeightRequest="30"
+                                        WidthRequest="50"
+                                        Padding="0"
+                                        CornerRadius="4"/>
                             </Grid>
 
                             <!-- 联系方式 -->
