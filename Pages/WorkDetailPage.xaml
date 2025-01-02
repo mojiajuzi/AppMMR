@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppMMR.Pages.WorkDetailPage"
-             Title="WorkDetailPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:vm="clr-namespace:AppMMR.ViewModels"
+            x:DataType="vm:WorkDetailViewModel"
+            x:Class="AppMMR.Pages.WorkDetailPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- 基本信息卡片 -->
+            <Frame BackgroundColor="White"
+                   Padding="20"
+                   HasShadow="True"
+                   BorderColor="Transparent">
+                <VerticalStackLayout Spacing="16">
+                    <!-- 项目名称 -->
+                    <Grid ColumnDefinitions="Auto,*" 
+                          ColumnSpacing="8">
+                        <Label Grid.Column="0"
+                               Text="项目名称："
+                               TextColor="{StaticResource Gray600}"
+                               FontSize="14"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding WorkName}"
+                               TextColor="{StaticResource Gray900}"
+                               FontSize="14"/>
+                    </Grid>
+
+                    <!-- 其他项目信息 -->
+                    <!-- ... -->
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:vm="clr-namespace:AppMMR.ViewModels"
+            xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+            x:DataType="vm:WorkTabViewModel"
+            android:TabbedPage.ToolbarPlacement="Bottom"
+            x:Class="AppMMR.Pages.WorkTabPage"
+            ItemsSource="{Binding TabItems}">
+
+    <TabbedPage.ItemTemplate>
+        <DataTemplate x:DataType="vm:TabItemViewModel">
+            <ContentPage Title="{Binding Title}"
+                         IconImageSource="dotnet_bot.png"
+                         Content="{Binding PageContent}"/>
+        </DataTemplate>
+    </TabbedPage.ItemTemplate>
+</TabbedPage>

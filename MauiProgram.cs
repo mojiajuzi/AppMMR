@@ -45,6 +45,9 @@ namespace AppMMR
             builder.Services.AddTransient<WorkDetailViewModel>();
             builder.Services.AddTransient<WorkDetailPage>();
 
+            builder.Services.AddTransient<WorkTabViewModel>();
+            builder.Services.AddTransient<WorkTabPage>();
+
             //项目相关
             builder.Services.AddTransient<WorkFormViewModel>();
             builder.Services.AddTransient<WorkFormPage>();

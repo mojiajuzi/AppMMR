@@ -127,5 +127,13 @@ namespace AppMMR.ViewModels
         {
             LoadWorks();
         }
+
+        [RelayCommand]
+        private async Task ViewWork()
+        {
+            await Navigation.PushModalAsync(_serviceProvider.GetRequiredService<WorkTabPage>());
+        }
+
+
     }
 }
