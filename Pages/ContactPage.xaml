@@ -11,29 +11,32 @@
     <Shell.TitleView>
         <Grid ColumnDefinitions="Auto,*,Auto" 
               Padding="0,0,10,0">
-            <!-- 搜索栏 -->
-            <SearchBar Grid.Column="1"
-                      x:Name="searchBar"
-                      Placeholder="搜索联系人..."
-                      PlaceholderColor="{StaticResource Gray400}"
-                      TextColor="{StaticResource Gray900}"
-                      BackgroundColor="Transparent"
-                      HorizontalOptions="Fill"
-                      Margin="10,0"
-                      Text="{Binding SearchText}"
-                      SearchCommand="{Binding PerformSearchCommand}"
-                      SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"/>
+            <!-- 头部工具栏 -->
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="*,Auto"
+                  Padding="20,10"
+                  ColumnSpacing="10">
+                
+                <!-- 搜索框 -->
+                <SearchBar Grid.Column="0"
+                           Text="{Binding SearchText}"
+                           Placeholder="搜索联系人"
+                           BackgroundColor="Transparent"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                           PlaceholderColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}"
+                           CancelButtonColor="{StaticResource Primary}"
+                           HeightRequest="40"/>
 
-            <!-- 添加按钮 -->
-            <Button Grid.Column="2"
-                    Text="添加"
-                    Command="{Binding AddContactCommand}"
-                    BackgroundColor="Transparent"
-                    TextColor="{StaticResource Primary}"
-                    FontSize="14"
-                    Padding="10,0"
-                    HeightRequest="36"
-                    VerticalOptions="Center"/>
+                <!-- 添加按钮 -->
+                <Button Grid.Column="1"
+                        Text="添加"
+                        Command="{Binding AddContactCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        HeightRequest="40"
+                        WidthRequest="80"
+                        CornerRadius="20"/>
+            </Grid>
         </Grid>
     </Shell.TitleView>
 

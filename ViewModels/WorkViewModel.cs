@@ -98,7 +98,7 @@ namespace AppMMR.ViewModels
                         .ThenInclude(wc => wc.Contact)
                     .Where(w => EF.Functions.Like(w.Name, $"%{query}%") ||
                                EF.Functions.Like(w.Description ?? "", $"%{query}%"))
-                    .OrderByDescending(w => w.StartAt)
+                    .OrderByDescending(w => w.DateModified)
                     .ToList();
 
                 SearchResults = new ObservableCollection<WorkModel>(results);
