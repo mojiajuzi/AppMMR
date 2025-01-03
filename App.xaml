@@ -20,6 +20,7 @@
             <converters:BoolToIncomeTypeConverter x:Key="BoolToIncomeTypeConverter" />
             <converters:WorkStatusToColorConverter x:Key="WorkStatusToColorConverter" />
             <converters:ColorWithOpacityConverter x:Key="ColorWithOpacityConverter" />
+            <converters:AmountToProgressConverter x:Key="AmountToProgressConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

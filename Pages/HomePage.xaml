@@ -1,12 +1,190 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AppMMR.Pages.HomePage"
-             Title="HomePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:vm="clr-namespace:AppMMR.ViewModels"
+             x:DataType="vm:HomeViewModel"
+             x:Class="AppMMR.Pages.HomePage">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- 状态统计卡片 -->
+            <Frame BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                   Padding="20"
+                   CornerRadius="12"
+                   HasShadow="True"
+                   BorderColor="Transparent">
+                <Grid RowDefinitions="Auto,*"
+                      RowSpacing="16">
+                    <Label Text="项目状态统计"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                           FontSize="16"
+                           FontAttributes="Bold"/>
+
+                    <Grid Grid.Row="1"
+                          ColumnDefinitions="*,*"
+                          RowDefinitions="Auto,Auto"
+                          ColumnSpacing="15"
+                          RowSpacing="15">
+                        <!-- 未开始 -->
+                        <Frame Grid.Row="0" Grid.Column="0"
+                               BackgroundColor="{StaticResource Warning}"
+                               Opacity="0.8"
+                               CornerRadius="8"
+                               Padding="15"
+                               HasShadow="False"
+                               BorderColor="Transparent">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="未开始"
+                                       TextColor="White"
+                                       FontSize="14"/>
+                                <Label Text="{Binding PreStartCount}"
+                                       TextColor="White"
+                                       FontSize="24"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- 进行中 -->
+                        <Frame Grid.Row="0" Grid.Column="1"
+                               BackgroundColor="{StaticResource Info}"
+                               Opacity="0.8"
+                               CornerRadius="8"
+                               Padding="15"
+                               HasShadow="False"
+                               BorderColor="Transparent">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="进行中"
+                                       TextColor="White"
+                                       FontSize="14"/>
+                                <Label Text="{Binding InProgressCount}"
+                                       TextColor="White"
+                                       FontSize="24"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- 已完成 -->
+                        <Frame Grid.Row="1" Grid.Column="0"
+                               BackgroundColor="{StaticResource Success}"
+                               Opacity="0.8"
+                               CornerRadius="8"
+                               Padding="15"
+                               HasShadow="False"
+                               BorderColor="Transparent">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="已完成"
+                                       TextColor="White"
+                                       FontSize="14"/>
+                                <Label Text="{Binding CompletedCount}"
+                                       TextColor="White"
+                                       FontSize="24"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- 已取消 -->
+                        <Frame Grid.Row="1" Grid.Column="1"
+                               BackgroundColor="{StaticResource Danger}"
+                               Opacity="0.8"
+                               CornerRadius="8"
+                               Padding="15"
+                               HasShadow="False"
+                               BorderColor="Transparent">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="已取消"
+                                       TextColor="White"
+                                       FontSize="14"/>
+                                <Label Text="{Binding CancelledCount}"
+                                       TextColor="White"
+                                       FontSize="24"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+                </Grid>
+            </Frame>
+
+            <!-- 收支统计卡片 -->
+            <Frame BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                   Padding="20"
+                   CornerRadius="12"
+                   HasShadow="True"
+                   BorderColor="Transparent">
+                <Grid RowDefinitions="Auto,Auto,Auto"
+                      RowSpacing="16">
+                    <Label Text="收支统计"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                           FontSize="16"
+                           FontAttributes="Bold"/>
+
+                    <!-- 总收入 -->
+                    <Grid Grid.Row="1" RowDefinitions="Auto,Auto" RowSpacing="4">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label Text="总收入"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                                   FontSize="14"/>
+                            <Label Grid.Column="1">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="￥"/>
+                                        <Span Text="{Binding TotalIncome, StringFormat='{0:N2}'}"
+                                              TextColor="{StaticResource Danger}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                        <Frame Grid.Row="1"
+                               HeightRequest="6"
+                               Padding="0"
+                               BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                               BorderColor="Transparent"
+                               CornerRadius="3"
+                               IsClippedToBounds="True">
+                            <Frame HorizontalOptions="Start"
+                                   WidthRequest="{Binding TotalIncome, Converter={StaticResource AmountToProgressConverter}, ConverterParameter={Binding TotalIncome}}"
+                                   HeightRequest="6"
+                                   Padding="0"
+                                   BackgroundColor="{StaticResource Danger}"
+                                   BorderColor="Transparent"
+                                   CornerRadius="3"/>
+                        </Frame>
+                    </Grid>
+
+                    <!-- 总支出 -->
+                    <Grid Grid.Row="2" RowDefinitions="Auto,Auto" RowSpacing="4">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label Text="总支出"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                                   FontSize="14"/>
+                            <Label Grid.Column="1">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="￥"/>
+                                        <Span Text="{Binding TotalExpense, StringFormat='{0:N2}'}"
+                                              TextColor="{StaticResource Success}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                        <Frame Grid.Row="1"
+                               HeightRequest="6"
+                               Padding="0"
+                               BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                               BorderColor="Transparent"
+                               CornerRadius="3"
+                               IsClippedToBounds="True">
+                            <Frame HorizontalOptions="Start"
+                                   WidthRequest="{Binding TotalExpense, Converter={StaticResource AmountToProgressConverter}, ConverterParameter={Binding TotalIncome}}"
+                                   HeightRequest="6"
+                                   Padding="0"
+                                   BackgroundColor="{StaticResource Success}"
+                                   BorderColor="Transparent"
+                                   CornerRadius="3"/>
+                        </Frame>
+                    </Grid>
+                </Grid>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

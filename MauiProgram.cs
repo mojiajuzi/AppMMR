@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using AppMMR.Pages;
 using AppMMR.Entities;
 using Microsoft.EntityFrameworkCore;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace AppMMR
 {
@@ -15,6 +16,7 @@ namespace AppMMR
         {
             var builder = MauiApp.CreateBuilder();
             builder
+                .UseSkiaSharp()
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
@@ -66,6 +68,10 @@ namespace AppMMR
             builder.Services.AddTransient<TagFormPage>();
             builder.Services.AddTransient<TagViewModel>();
             builder.Services.AddTransient<TagPage>();
+
+            //首页
+            builder.Services.AddTransient<HomeViewModel>();
+            builder.Services.AddTransient<HomePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
