@@ -14,7 +14,11 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <toolkit:IsNotEqualConverter x:Key="IntegerNotZeroConverter" />
+            <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
+            <toolkit:IsStringNotNullOrEmptyConverter x:Key="IsNotNullOrEmptyConverter" />
+            <toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsNotNullOrWhiteSpaceConverter" />
+            <toolkit:IsListNotNullOrEmptyConverter x:Key="CollectionNotEmptyConverter" />
+            
             <converters:EnumDescriptionConverter x:Key="WorkStatusConverter" />
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
             <converters:BoolToIncomeTypeConverter x:Key="BoolToIncomeTypeConverter" />

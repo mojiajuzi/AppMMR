@@ -29,7 +29,7 @@
                    CornerRadius="8">
                 <VerticalStackLayout Spacing="8">
                     <!-- 手机号 -->
-                    <Label IsVisible="{Binding SelectedContact.Phone, Converter={StaticResource StringNotNullOrEmptyConverter}}"
+                    <Label IsVisible="{Binding SelectedContact.Phone, Converter={StaticResource IsNotNullOrEmptyConverter}}"
                            TextColor="{StaticResource Gray600}"
                            FontSize="14">
                         <Label.FormattedText>
@@ -41,7 +41,7 @@
                     </Label>
 
                     <!-- 邮箱 -->
-                    <Label IsVisible="{Binding SelectedContact.Email, Converter={StaticResource StringNotNullOrEmptyConverter}}"
+                    <Label IsVisible="{Binding SelectedContact.Email, Converter={StaticResource IsNotNullOrEmptyConverter}}"
                            TextColor="{StaticResource Gray600}"
                            FontSize="14">
                         <Label.FormattedText>

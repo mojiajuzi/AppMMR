@@ -37,7 +37,7 @@
                                     <Label Text="{Binding Contact.Email}"
                                            FontSize="12"
                                            TextColor="{StaticResource Gray600}"
-                                           IsVisible="{Binding Contact.Email, Converter={StaticResource StringNotNullOrEmptyConverter}}"/>
+                                           IsVisible="{Binding Contact.Email, Converter={StaticResource IsNotNullOrEmptyConverter}}"/>
                                 </VerticalStackLayout>
 
                                 <Label Grid.Column="1"
@@ -70,7 +70,7 @@
                             <!-- 备注和日期 -->
                             <Grid Grid.Row="1" 
                                   ColumnDefinitions="*, Auto"
-                                  IsVisible="{Binding Remark, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                  IsVisible="{Binding Remark, Converter={StaticResource IsNotNullOrEmptyConverter}}">
                                 <Label Grid.Column="0"
                                        Text="{Binding Remark}"
                                        TextColor="{StaticResource Gray600}"

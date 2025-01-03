@@ -107,7 +107,7 @@
 
                     <!-- 项目描述 -->
                     <VerticalStackLayout Spacing="8"
-                                       IsVisible="{Binding WorkData.Description, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                       IsVisible="{Binding WorkData.Description, Converter={StaticResource IsNotNullOrEmptyConverter}}">
                         <Label Text="项目描述"
                                TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
                                FontSize="14"/>
@@ -192,11 +192,11 @@
             </Border>
 
             <!-- 标签列表卡片 -->
-            <Border BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+            <Border IsVisible="{Binding WorkData.WorkTags, Converter={StaticResource CollectionNotEmptyConverter}}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
                     Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
                     StrokeThickness="1"
-                    StrokeShape="RoundRectangle 12"
-                    IsVisible="{Binding WorkData.WorkTags, Converter={StaticResource CollectionNotEmptyConverter}}">
+                    StrokeShape="RoundRectangle 12">
                 <Border.Shadow>
                     <Shadow Brush="{StaticResource Gray300}"
                            Offset="0,2"

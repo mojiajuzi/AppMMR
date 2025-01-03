@@ -68,7 +68,7 @@
                                 <!-- 手机号 -->
                                 <Grid ColumnDefinitions="Auto,*" 
                                       ColumnSpacing="8"
-                                      IsVisible="{Binding Contact.Phone, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                      IsVisible="{Binding Contact.Phone, Converter={StaticResource IsNotNullOrEmptyConverter}}">
                                     <Label Grid.Column="0"
                                            Text="手机："
                                            TextColor="{StaticResource Gray600}"
@@ -87,7 +87,7 @@
                                 <!-- 邮箱 -->
                                 <Grid ColumnDefinitions="Auto,*" 
                                       ColumnSpacing="8"
-                                      IsVisible="{Binding Contact.Email, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                                      IsVisible="{Binding Contact.Email, Converter={StaticResource IsNotNullOrEmptyConverter}}">
                                     <Label Grid.Column="0"
                                            Text="邮箱："
                                            TextColor="{StaticResource Gray600}"
