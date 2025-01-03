@@ -201,8 +201,10 @@ namespace AppMMR.ViewModels
         {
             try
             {
-                var contact = await Contacts.Default.PickContactAsync();
-                
+
+
+                var contact = await Microsoft.Maui.ApplicationModel.Communication.Contacts.Default.PickContactAsync();
+
                 if (contact == null)
                     return;
 
@@ -215,7 +217,7 @@ namespace AppMMR.ViewModels
                     ContactData.Phone = phone;
 
                     // 如果联系人有姓名且当前表单姓名为空，则同时填充姓名
-                    if (!string.IsNullOrEmpty(contact.DisplayName) && 
+                    if (!string.IsNullOrEmpty(contact.DisplayName) &&
                         string.IsNullOrEmpty(ContactData.Name))
                     {
                         ContactData.Name = contact.DisplayName;
@@ -224,8 +226,8 @@ namespace AppMMR.ViewModels
                 else
                 {
                     await Application.Current.MainPage.DisplayAlert(
-                        "提示", 
-                        "所选联系人没有电话号码", 
+                        "提示",
+                        "所选联系人没有电话号码",
                         "确定");
                 }
             }
@@ -233,8 +235,8 @@ namespace AppMMR.ViewModels
             {
                 System.Diagnostics.Debug.WriteLine($"选择联系人失败: {ex.Message}");
                 await Application.Current.MainPage.DisplayAlert(
-                    "错误", 
-                    "无法访问通讯录，请确保已授予权限", 
+                    "错误",
+                    "无法访问通讯录，请确保已授予权限",
                     "确定");
             }
         }

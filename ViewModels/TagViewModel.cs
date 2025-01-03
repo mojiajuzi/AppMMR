@@ -6,45 +6,97 @@ using Microsoft.Extensions.DependencyInjection;
 using AppMMR.Entities;
 using Microsoft.EntityFrameworkCore;
 using AppMMR.Models;
+using System.Diagnostics;
 
 namespace AppMMR.ViewModels
 {
     public partial class TagViewModel : ViewModelBase
     {
+        private readonly IServiceProvider _serviceProvider;
+        private readonly AppDbContext _dbContext;
         private INavigation Navigation => Application.Current?.MainPage?.Navigation;
 
-        private readonly IServiceProvider _serviceProvider;
-
-        private readonly AppDbContext _dbContext;
+        [ObservableProperty]
+        private ObservableCollection<TagModel> tags = new();
 
         [ObservableProperty]
-        private ObservableCollection<TagModel> tags;
-
-        [ObservableProperty]
-        private ObservableCollection<TagModel> searchResults = [];
+        private ObservableCollection<TagModel> searchResults = new();
 
         [ObservableProperty]
         private string? searchText = string.Empty;
 
-        public TagViewModel(IServiceProvider serviceProvider, AppDbContext appDbContext)
+        public TagViewModel(IServiceProvider serviceProvider, AppDbContext dbContext)
         {
             _serviceProvider = serviceProvider;
-            _dbContext = appDbContext;
+            _dbContext = dbContext;
             LoadTags();
         }
 
-        private void LoadTags()
+        public void LoadTags()
         {
             try
             {
-                var tagList = _dbContext.Tags.AsNoTracking().ToList();
-                Tags = new ObservableCollection<TagModel>(tagList);
-                SearchResults = Tags;
+                var tagList = _dbContext.Tags
+                    .AsNoTracking()
+                    .OrderByDescending(t => t.DateModified)
+                    .ToList();
+
+                Tags.Clear();
+                foreach (var tag in tagList)
+                {
+                    Tags.Add(tag);
+                }
+                SearchResults = new ObservableCollection<TagModel>(Tags);
             }
             catch (Exception ex)
             {
-                // 可以添加错误处理逻辑
-                System.Diagnostics.Debug.WriteLine($"加载标签失败: {ex.Message}");
+                Debug.WriteLine($"加载标签失败: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private async Task AddTag()
+        {
+            try
+            {
+                var page = _serviceProvider.GetRequiredService<TagFormPage>();
+                page.Disappearing += TagFormPage_Disappearing;
+                await Navigation.PushModalAsync(page);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"导航失败: {ex.Message}");
+            }
+        }
+
+        private void TagFormPage_Disappearing(object sender, EventArgs e)
+        {
+            if (sender is TagFormPage page)
+            {
+                page.Disappearing -= TagFormPage_Disappearing;
+                LoadTags();
+            }
+        }
+
+        [RelayCommand]
+        private async Task UpdateTag(TagModel tag)
+        {
+            if (tag == null) return;
+
+            try
+            {
+                var page = _serviceProvider.GetRequiredService<TagFormPage>();
+                page.Disappearing += TagFormPage_Disappearing;
+                var viewModel = page.BindingContext as TagFormViewModel;
+                if (viewModel != null)
+                {
+                    viewModel.TagData = tag;
+                }
+                await Navigation.PushModalAsync(page);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"导航失败: {ex.Message}");
             }
         }
 
@@ -60,63 +112,20 @@ namespace AppMMR.ViewModels
             {
                 if (string.IsNullOrWhiteSpace(query))
                 {
-                    SearchResults = Tags;
+                    SearchResults = new ObservableCollection<TagModel>(Tags);
                     return;
                 }
 
-                // 方案1：使用 EF.Functions.Like
-                var results = _dbContext.Tags
-                    .AsNoTracking()
-                    .Where(t => EF.Functions.Like(t.Name, $"%{query}%"))
+                var results = Tags.Where(t =>
+                    t.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
                     .ToList();
-
-                // 或者方案2：先获取数据再在内存中过滤
-                //var results = Tags.Where(t => 
-                //    t.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
-                //    .ToList();
 
                 SearchResults = new ObservableCollection<TagModel>(results);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"搜索失败: {ex.Message}");
-                // 发生错误时显示所有标签
+                Debug.WriteLine($"搜索失败: {ex.Message}");
                 SearchResults = Tags;
-            }
-        }
-
-        [RelayCommand]
-        private async Task AddTag()
-        {
-            try
-            {
-                await Navigation.PushModalAsync(_serviceProvider.GetRequiredService<TagFormPage>());
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"导航失败: {ex.Message}");
-            }
-        }
-
-        [RelayCommand]
-        private async Task UpdateTag(TagModel tag)
-        {
-            if (tag == null) return;
-
-            try
-            {
-                var page = _serviceProvider.GetRequiredService<TagFormPage>();
-                var viewModel = page.BindingContext as TagFormViewModel;
-                if (viewModel != null)
-                {
-                    viewModel.TagData = tag;
-                }
-                await Navigation.PushModalAsync(page);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"导航失败: {ex.Message}");
-                // 可以添加用户提示
             }
         }
     }
