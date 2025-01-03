@@ -224,7 +224,7 @@
                                 <DataTemplate x:DataType="model:WorkModel">
                                     <Frame Margin="0,4"
                                            Padding="16"
-                                           BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray800}}"
+                                           BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
                                            BorderColor="Transparent"
                                            CornerRadius="8">
                                         <Frame.GestureRecognizers>
