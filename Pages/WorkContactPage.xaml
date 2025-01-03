@@ -5,24 +5,14 @@
              xmlns:model="clr-namespace:AppMMR.Models"
              x:DataType="vm:WorkContactViewModel"
              x:Class="AppMMR.Pages.WorkContactPage"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
              Title="相关联系人">
 
-    <Grid RowDefinitions="Auto,*">
-        <!-- 添加按钮 -->
-        <Button Grid.Row="0"
-                Text="添加联系人"
-                Command="{Binding AddContactCommand}"
-                BackgroundColor="{StaticResource Primary}"
-                TextColor="White"
-                FontSize="14"
-                HeightRequest="40"
-                CornerRadius="4"
-                Margin="20"/>
-
+    <Grid RowDefinitions="*,Auto">
         <!-- 联系人列表 -->
-        <CollectionView Grid.Row="1"
+        <CollectionView Grid.Row="0"
                        ItemsSource="{Binding WorkContacts}"
-                       Margin="20,0,20,20">
+                       Margin="20,20,20,20">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:WorkContactModel">
                     <Frame Margin="0,6" 
@@ -44,12 +34,20 @@
                                        FontAttributes="Bold"
                                        TextColor="{StaticResource Gray900}"/>
 
-                                <Label Grid.Column="1"
-                                       Text="{Binding Amount, StringFormat='{0:C}'}"
-                                       TextColor="{Binding IsCome, Converter={StaticResource BoolToColorConverter}}"
-                                       FontSize="16"
-                                       FontAttributes="Bold"
-                                       VerticalOptions="Center"/>
+                                <Label Grid.Column="1">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="￥"/>
+                                            <Span Text="{Binding Amount, StringFormat='{0:N2}'}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                    <Label.TextColor>
+                                        <Binding Path="IsCome" Converter="{StaticResource BoolToColorConverter}"/>
+                                    </Label.TextColor>
+                                    <Label.FontSize>16</Label.FontSize>
+                                    <Label.FontAttributes>Bold</Label.FontAttributes>
+                                    <Label.VerticalOptions>Center</Label.VerticalOptions>
+                                </Label>
 
                                 <Button Grid.Column="2"
                                         Text="编辑"
@@ -120,5 +118,20 @@
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
         </CollectionView>
+
+        <!-- 添加按钮 -->
+        <Border Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                StrokeThickness="1">
+            <Button Text="添加联系人"
+                    Command="{Binding AddContactCommand}"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    FontSize="14"
+                    HeightRequest="45"
+                    CornerRadius="8"
+                    Margin="20,10"/>
+        </Border>
     </Grid>
 </ContentPage>

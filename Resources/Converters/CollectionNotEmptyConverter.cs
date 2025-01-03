@@ -1,14 +1,16 @@
+
 using System.Globalization;
 
-public class BoolToColorConverter : IValueConverter
+
+public class CollectionNotEmptyConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is bool isIncome)
+        if (value is IEnumerable<object> collection)
         {
-            return isIncome ? Application.Current.Resources["Danger"] : Application.Current.Resources["Success"];
+            return collection.Any();
         }
-        return Application.Current.Resources["Gray900"];
+        return false;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

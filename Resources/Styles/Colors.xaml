@@ -14,6 +14,19 @@
     <Color x:Key="SecondaryDarkText">#4C566A</Color><!-- Nord3: 深灰色 -->
     <Color x:Key="Tertiary">#8FBCBB</Color>         <!-- Nord7: 青色 -->
 
+    <!-- Aurora (极光) -->
+    <Color x:Key="Nord11">#BF616A</Color>           <!-- 红色 -->
+    <Color x:Key="Nord12">#D08770</Color>           <!-- 橙色 -->
+    <Color x:Key="Nord13">#EBCB8B</Color>           <!-- 黄色 -->
+    <Color x:Key="Nord14">#A3BE8C</Color>           <!-- 绿色 -->
+    <Color x:Key="Nord15">#B48EAD</Color>           <!-- 紫色 -->
+
+    <!-- 状态颜色 -->
+    <Color x:Key="Success">#A3BE8C</Color>          <!-- 使用 Nord14 绿色 -->
+    <Color x:Key="Danger">#BF616A</Color>           <!-- 使用 Nord11 红色 -->
+    <Color x:Key="Warning">#EBCB8B</Color>          <!-- 使用 Nord13 黄色 -->
+    <Color x:Key="Info">#81A1C1</Color>             <!-- 使用 Nord9 蓝色 -->
+
     <!-- 基础色调 -->
     <Color x:Key="White">#FFFFFF</Color>
     <Color x:Key="Black">#000000</Color>

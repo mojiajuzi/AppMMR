@@ -3,62 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:AppMMR.ViewModels"
              xmlns:model="clr-namespace:AppMMR.Models"
+             xmlns:converters="clr-namespace:AppMMR.Converters"
              x:DataType="vm:WorkPaymentViewModel"
              x:Class="AppMMR.Pages.WorkPaymentPage"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
              Title="收支记录">
 
-    <Grid RowDefinitions="Auto,Auto,*">
-        <!-- 统计信息 -->
-        <Grid Grid.Row="0" 
-              Margin="20,10"
-              ColumnDefinitions="*,*,*"
-              ColumnSpacing="15">
-            <VerticalStackLayout Grid.Column="0">
-                <Label Text="总收入"
-                       TextColor="{StaticResource Gray600}"
-                       FontSize="12"/>
-                <Label Text="{Binding TotalIncome, StringFormat='{0:C}'}"
-                       TextColor="{StaticResource Danger}"
-                       FontSize="16"
-                       FontAttributes="Bold"/>
-            </VerticalStackLayout>
-            
-            <VerticalStackLayout Grid.Column="1">
-                <Label Text="总支出"
-                       TextColor="{StaticResource Gray600}"
-                       FontSize="12"/>
-                <Label Text="{Binding TotalExpense, StringFormat='{0:C}'}"
-                       TextColor="{StaticResource Success}"
-                       FontSize="16"
-                       FontAttributes="Bold"/>
-            </VerticalStackLayout>
-            
-            <VerticalStackLayout Grid.Column="2">
-                <Label Text="结余"
-                       TextColor="{StaticResource Gray600}"
-                       FontSize="12"/>
-                <Label Text="{Binding Balance, StringFormat='{0:C}'}"
-                       TextColor="{StaticResource Primary}"
-                       FontSize="16"
-                       FontAttributes="Bold"/>
-            </VerticalStackLayout>
-        </Grid>
-
-        <!-- 添加按钮 -->
-        <Button Grid.Row="1"
-                Text="添加收支"
-                Command="{Binding AddPaymentCommand}"
-                BackgroundColor="{StaticResource Primary}"
-                TextColor="White"
-                FontSize="14"
-                HeightRequest="40"
-                CornerRadius="4"
-                Margin="20"/>
-
+    <Grid RowDefinitions="*,Auto">
         <!-- 收支列表 -->
-        <CollectionView Grid.Row="2"
+        <CollectionView Grid.Row="0"
                        ItemsSource="{Binding WorkPayments}"
-                       Margin="20,0,20,20">
+                       Margin="20,20,20,20">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:WorkPaymentModel">
                     <Frame Margin="0,6" 
@@ -86,11 +41,18 @@
                                 </VerticalStackLayout>
 
                                 <Label Grid.Column="1"
-                                       Text="{Binding Amount, StringFormat='{0:C}'}"
-                                       TextColor="{Binding IsIncome, Converter={StaticResource BoolToColorConverter}}"
-                                       FontSize="16"
-                                       FontAttributes="Bold"
-                                       VerticalOptions="Center"/>
+                                       VerticalOptions="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="￥" 
+                                                  TextColor="{Binding IsIncome, Converter={StaticResource BoolToColorConverter}}"/>
+                                            <Span Text="{Binding Amount, StringFormat='{0:N2}'}"
+                                                  TextColor="{Binding IsIncome, Converter={StaticResource BoolToColorConverter}}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                    <Label.FontSize>16</Label.FontSize>
+                                    <Label.FontAttributes>Bold</Label.FontAttributes>
+                                </Label>
 
                                 <Button Grid.Column="2"
                                         Text="编辑"
@@ -133,5 +95,20 @@
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
         </CollectionView>
+
+        <!-- 添加按钮 -->
+        <Border Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                StrokeThickness="1">
+            <Button Text="添加收支"
+                    Command="{Binding AddPaymentCommand}"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    FontSize="14"
+                    HeightRequest="45"
+                    CornerRadius="8"
+                    Margin="20,10"/>
+        </Border>
     </Grid>
 </ContentPage>

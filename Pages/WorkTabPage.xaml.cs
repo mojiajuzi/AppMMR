@@ -7,7 +7,7 @@ public partial class WorkTabPage : TabbedPage
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly WorkTabViewModel _viewModel;
-    
+
     public WorkTabPage(WorkTabViewModel viewModel, IServiceProvider serviceProvider)
     {
         InitializeComponent();
@@ -31,19 +31,19 @@ public partial class WorkTabPage : TabbedPage
         Children.Add(new NavigationPage(detailPage)
         {
             Title = "项目详情",
-            IconImageSource = "info.png"
+            IconImageSource = "circle_info.svg"
         });
 
         Children.Add(new NavigationPage(contactPage)
         {
             Title = "相关联系人",
-            IconImageSource = "contacts.png"
+            IconImageSource = "address_book.svg"
         });
 
         Children.Add(new NavigationPage(paymentPage)
         {
             Title = "收支记录",
-            IconImageSource = "payment.png"
+            IconImageSource = "credit_card.svg"
         });
     }
 }

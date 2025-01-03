@@ -16,6 +16,8 @@
 
             <toolkit:IsNotEqualConverter x:Key="IntegerNotZeroConverter" />
             <converters:EnumDescriptionConverter x:Key="WorkStatusConverter" />
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+            <converters:BoolToIncomeTypeConverter x:Key="BoolToIncomeTypeConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

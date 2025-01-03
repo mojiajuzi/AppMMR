@@ -2,22 +2,184 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             xmlns:vm="clr-namespace:AppMMR.ViewModels"
+            xmlns:model="clr-namespace:AppMMR.Models"
+            xmlns:enum="clr-namespace:AppMMR.Models.Enums"
             x:DataType="vm:WorkDetailViewModel"
-            x:Class="AppMMR.Pages.WorkDetailPage">
+            x:Class="AppMMR.Pages.WorkDetailPage"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+            Title="项目详情">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
             <!-- 基本信息卡片 -->
-            <Frame BackgroundColor="White"
-                   Padding="20"
-                   HasShadow="True"
-                   BorderColor="Transparent">
-                <VerticalStackLayout Spacing="16">
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 12">
+                <Border.Shadow>
+                    <Shadow Brush="{StaticResource Gray300}"
+                           Offset="0,2"
+                           Radius="4"
+                           Opacity="0.3"/>
+                </Border.Shadow>
+                <VerticalStackLayout Padding="20" Spacing="16">
                     <!-- 项目名称 -->
-                    <Grid ColumnDefinitions="Auto,*" 
-                          ColumnSpacing="8">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.Column="0"
+                               Text="项目名称"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding WorkData.Name}"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
                     </Grid>
+
+                    <!-- 项目状态 -->
+                    <Border StrokeShape="RoundRectangle 20"
+                           Padding="12,6"
+                           HorizontalOptions="Start"
+                           BackgroundColor="{StaticResource Primary}"
+                           Opacity="0.1">
+                        <Label Text="{Binding WorkData.Status, Converter={StaticResource EnumDescriptionConverter}}"
+                               TextColor="{StaticResource Primary}"
+                               FontSize="12"
+                               FontAttributes="Bold"/>
+                    </Border>
+
+                    <!-- 项目金额 -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.Column="0"
+                               Text="项目金额"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding WorkData.Funds, StringFormat='{0:C}'}"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                    <!-- 起止时间 -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.Column="0"
+                               Text="起止时间"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                               FontSize="14"
+                               VerticalOptions="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding WorkData.StartAt, StringFormat='{0:yyyy-MM-dd}'}"/>
+                                    <Span Text=" 至 "/>
+                                    <Span Text="{Binding WorkData.EndAt, StringFormat='{0:yyyy-MM-dd}'}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+
+                    <!-- 项目描述 -->
+                    <VerticalStackLayout Spacing="8"
+                                       IsVisible="{Binding WorkData.Description, Converter={StaticResource StringNotNullOrEmptyConverter}}">
+                        <Label Text="项目描述"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                               FontSize="14"/>
+                        <Label Text="{Binding WorkData.Description}"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                               FontSize="14"/>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
+
+            <!-- 财务统计卡片 -->
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 12">
+                <Border.Shadow>
+                    <Shadow Brush="{StaticResource Gray300}"
+                           Offset="0,2"
+                           Radius="4"
+                           Opacity="0.3"/>
+                </Border.Shadow>
+                <Grid ColumnDefinitions="*,*,*"
+                      ColumnSpacing="15"
+                      Padding="20">
+                    <VerticalStackLayout Grid.Column="0">
+                        <Label Text="总收入"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                               FontSize="12"/>
+                        <Label Text="{Binding WorkData.TotalIncome, StringFormat='{0:C}'}"
+                               TextColor="{StaticResource Danger}"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                    
+                    <VerticalStackLayout Grid.Column="1">
+                        <Label Text="总支出"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                               FontSize="12"/>
+                        <Label Text="{Binding WorkData.TotalExpense, StringFormat='{0:C}'}"
+                               TextColor="{StaticResource Success}"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                    
+                    <VerticalStackLayout Grid.Column="2">
+                        <Label Text="结余"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                               FontSize="12"/>
+                        <Label Text="{Binding WorkData.Balance, StringFormat='{0:C}'}"
+                               TextColor="{StaticResource Primary}"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- 标签列表卡片 -->
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 12"
+                    IsVisible="{Binding WorkData.WorkTags, Converter={StaticResource CollectionNotEmptyConverter}}">
+                <Border.Shadow>
+                    <Shadow Brush="{StaticResource Gray300}"
+                           Offset="0,2"
+                           Radius="4"
+                           Opacity="0.3"/>
+                </Border.Shadow>
+                <VerticalStackLayout Padding="20" Spacing="12">
+                    <Label Text="项目标签"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                           FontSize="14"/>
+                    <FlexLayout BindableLayout.ItemsSource="{Binding WorkData.WorkTags}"
+                              Wrap="Wrap"
+                              JustifyContent="Start"
+                              AlignItems="Center"
+                              AlignContent="Start">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="model:WorkTagModel">
+                                <Border BackgroundColor="{StaticResource Primary}"
+                                        StrokeShape="RoundRectangle 20"
+                                        Padding="12,4"
+                                        Margin="0,4,8,4">
+                                    <Label Text="{Binding Tag.Name}"
+                                           TextColor="White"
+                                           FontSize="12"/>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </Border>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
