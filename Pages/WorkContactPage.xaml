@@ -121,8 +121,8 @@
 
         <!-- 添加按钮 -->
         <Border Grid.Row="1"
-                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
-                Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
                 StrokeThickness="1">
             <Button Text="添加联系人"
                     Command="{Binding AddContactCommand}"

@@ -10,7 +10,7 @@
         <VerticalStackLayout Padding="20" Spacing="20">
 
             <!-- 状态统计卡片 -->
-            <Frame BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+            <Frame BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
                    Padding="20"
                    CornerRadius="12"
                    HasShadow="True"
@@ -123,7 +123,7 @@
             </Frame>
 
             <!-- 收支统计卡片 -->
-            <Frame BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+            <Frame BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
                    Padding="20"
                    CornerRadius="12"
                    HasShadow="True"
@@ -154,7 +154,7 @@
                         <Frame Grid.Row="1"
                                HeightRequest="6"
                                Padding="0"
-                               BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                               BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
                                BorderColor="Transparent"
                                CornerRadius="3"
                                IsClippedToBounds="True">
@@ -187,7 +187,7 @@
                         <Frame Grid.Row="1"
                                HeightRequest="6"
                                Padding="0"
-                               BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                               BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
                                BorderColor="Transparent"
                                CornerRadius="3"
                                IsClippedToBounds="True">
