@@ -4,6 +4,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using CommunityToolkit.Mvvm.Input;
 using AppMMR.Pages;
+using System.Collections.ObjectModel;
+using System.Linq;
+using AppMMR.Models;
 
 namespace AppMMR.ViewModels;
 
@@ -35,9 +38,13 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty]
     private decimal balance;
 
+    [ObservableProperty]
+    private ObservableCollection<WorkModel> recentWorks;
+
     public HomeViewModel(AppDbContext dbContext)
     {
         _dbContext = dbContext;
+        RecentWorks = new ObservableCollection<WorkModel>();
         LoadStatistics();
     }
 
@@ -57,6 +64,19 @@ public partial class HomeViewModel : ViewModelBase
             TotalIncome = payments.Where(p => p.IsIncome).Sum(p => p.Amount);
             TotalExpense = payments.Where(p => !p.IsIncome).Sum(p => p.Amount);
             Balance = TotalIncome - TotalExpense;
+
+            // 加载最近的项目
+            var recent = _dbContext.Works
+                .AsNoTracking()
+                .OrderByDescending(w => w.DateCreated)
+                .Take(3)
+                .ToList();
+
+            RecentWorks.Clear();
+            foreach (var work in recent)
+            {
+                RecentWorks.Add(work);
+            }
         }
         catch (Exception ex)
         {
@@ -87,5 +107,17 @@ public partial class HomeViewModel : ViewModelBase
         {
             System.Diagnostics.Debug.WriteLine($"导航失败: {ex.Message}");
         }
+    }
+
+    [RelayCommand]
+    private async Task ViewWorkDetail(WorkModel work)
+    {
+        if (work == null) return;
+
+        var parameters = new Dictionary<string, object>
+        {
+            { "WorkId", work.Id }
+        };
+        await Shell.Current.GoToAsync("WorkDetail", parameters);
     }
 }

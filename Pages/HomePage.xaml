@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:AppMMR.ViewModels"
              x:DataType="vm:HomeViewModel"
              x:Class="AppMMR.Pages.HomePage"
+             xmlns:model="clr-namespace:AppMMR.Models"
              xmlns:enum="clr-namespace:AppMMR.Models.Enums">
 
     <ScrollView>
@@ -40,7 +41,7 @@
                                                       CommandParameter="{x:Static enum:WorkStatusEnum.PreStart}"/>
                             </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="未开始"
+                                <Label Text="{Binding Source={x:Static enum:WorkStatusEnum.PreStart}, Converter={StaticResource WorkStatusConverter}}"
                                        TextColor="White"
                                        FontSize="14"/>
                                 <Label Text="{Binding PreStartCount}"
@@ -63,7 +64,7 @@
                                                       CommandParameter="{x:Static enum:WorkStatusEnum.InProgress}"/>
                             </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="进行中"
+                                <Label Text="{Binding Source={x:Static enum:WorkStatusEnum.InProgress}, Converter={StaticResource WorkStatusConverter}}"
                                        TextColor="White"
                                        FontSize="14"/>
                                 <Label Text="{Binding InProgressCount}"
@@ -86,7 +87,7 @@
                                                       CommandParameter="{x:Static enum:WorkStatusEnum.Completed}"/>
                             </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="已完成"
+                                <Label Text="{Binding Source={x:Static enum:WorkStatusEnum.Completed}, Converter={StaticResource WorkStatusConverter}}"
                                        TextColor="White"
                                        FontSize="14"/>
                                 <Label Text="{Binding CompletedCount}"
@@ -109,7 +110,7 @@
                                                       CommandParameter="{x:Static enum:WorkStatusEnum.Cancelled}"/>
                             </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="已取消"
+                                <Label Text="{Binding Source={x:Static enum:WorkStatusEnum.Cancelled}, Converter={StaticResource WorkStatusConverter}}"
                                        TextColor="White"
                                        FontSize="14"/>
                                 <Label Text="{Binding CancelledCount}"
@@ -200,6 +201,93 @@
                                    CornerRadius="3"/>
                         </Frame>
                     </Grid>
+                </Grid>
+            </Frame>
+
+            <!-- 最近项目卡片 -->
+            <Frame BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                   Padding="20"
+                   CornerRadius="12"
+                   HasShadow="True"
+                   IsVisible="{Binding RecentWorks, Converter={StaticResource CollectionNotEmptyConverter}}"
+                   BorderColor="Transparent">
+                <Grid RowDefinitions="Auto,*"
+                      RowSpacing="16">
+                    <Label Text="最近项目"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                           FontSize="16"
+                           FontAttributes="Bold"/>
+
+                    <VerticalStackLayout Grid.Row="1" Spacing="12">
+                        <CollectionView ItemsSource="{Binding RecentWorks}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:WorkModel">
+                                    <Frame Margin="0,4"
+                                           Padding="16"
+                                           BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray800}}"
+                                           BorderColor="Transparent"
+                                           CornerRadius="8">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=ViewWorkDetailCommand}"
+                                                         CommandParameter="{Binding .}"/>
+                                        </Frame.GestureRecognizers>
+
+                                        <Grid RowDefinitions="Auto,Auto"
+                                              RowSpacing="8">
+                                            <!-- 项目名称和状态 -->
+                                            <Grid ColumnDefinitions="*, Auto"
+                                                  ColumnSpacing="12">
+                                                <Label Grid.Column="0"
+                                                       Text="{Binding Name}"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"/>
+
+                                                <Border Grid.Column="1"
+                                                        StrokeShape="RoundRectangle 20"
+                                                        Padding="12,4">
+                                                    <Border.BackgroundColor>
+                                                        <MultiBinding Converter="{StaticResource ColorWithOpacityConverter}">
+                                                            <Binding Path="Status" Converter="{StaticResource WorkStatusToColorConverter}"/>
+                                                            <Binding Source="0.1"/>
+                                                        </MultiBinding>
+                                                    </Border.BackgroundColor>
+                                                    <Label Text="{Binding Status, Converter={StaticResource WorkStatusConverter}}"
+                                                           TextColor="{Binding Status, Converter={StaticResource WorkStatusToColorConverter}}"
+                                                           FontSize="12"/>
+                                                </Border>
+                                            </Grid>
+
+                                            <!-- 金额和创建时间 -->
+                                            <Grid Grid.Row="1"
+                                                  ColumnDefinitions="Auto,*"
+                                                  ColumnSpacing="12">
+                                                <Label Grid.Column="0">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="￥"
+                                                                  TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"/>
+                                                            <Span Text="{Binding Funds, StringFormat='{0:N2}'}"
+                                                                  TextColor="{StaticResource Primary}"
+                                                                  FontAttributes="Bold"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                    <Label.FontSize>14</Label.FontSize>
+                                                </Label>
+                                                
+                                                <Label Grid.Column="1"
+                                                       Text="{Binding DateCreated, StringFormat='创建于 {0:yyyy-MM-dd}'}"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                                                       FontSize="12"
+                                                       HorizontalOptions="End"
+                                                       VerticalOptions="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
                 </Grid>
             </Frame>
         </VerticalStackLayout>

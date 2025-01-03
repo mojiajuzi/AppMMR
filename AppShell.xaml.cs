@@ -10,6 +10,7 @@ namespace AppMMR
             
             // 注册路由
             Routing.RegisterRoute("Work", typeof(WorkPage));
+            Routing.RegisterRoute("WorkDetail", typeof(WorkDetailPage));
         }
     }
 }

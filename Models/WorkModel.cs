@@ -34,11 +34,11 @@ public class WorkModel : BaseModel
     public virtual ICollection<WorkPaymentModel> WorkPayments { get; set; } = new List<WorkPaymentModel>();
 
     [NotMapped]
-    public decimal TotalIncome => WorkPayments?.Where(p => p.IsIncome).Sum(p => p.Amount) ?? 0;
+    public decimal TotalIncome { get; set; }
 
     [NotMapped]
-    public decimal TotalExpense => WorkPayments?.Where(p => !p.IsIncome).Sum(p => p.Amount) ?? 0;
+    public decimal TotalExpense { get; set; }
 
     [NotMapped]
-    public decimal Balance => TotalIncome - TotalExpense;
+    public decimal Balance { get; set; }
 }

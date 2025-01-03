@@ -1,7 +1,6 @@
 ﻿using AppMMR.Entities;
 using AppMMR.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,18 +10,25 @@ using System.Threading.Tasks;
 
 namespace AppMMR.ViewModels
 {
+    [QueryProperty(nameof(WorkId), "WorkId")]
     public partial class WorkDetailViewModel : ObservableObject
     {
         private readonly AppDbContext _dbContext;
-        private readonly IServiceProvider _serviceProvider;
 
         [ObservableProperty]
         private WorkModel workData;
 
-        public WorkDetailViewModel(AppDbContext dbContext, IServiceProvider serviceProvider)
+        [ObservableProperty]
+        private int workId;
+
+        public WorkDetailViewModel(AppDbContext dbContext)
         {
             _dbContext = dbContext;
-            _serviceProvider = serviceProvider;
+        }
+
+        partial void OnWorkIdChanged(int value)
+        {
+            LoadWork(value);
         }
 
         public void LoadWork(int workId)
@@ -33,10 +39,16 @@ namespace AppMMR.ViewModels
                     .AsNoTracking()
                     .Include(w => w.WorkTags)
                         .ThenInclude(wt => wt.Tag)
+                    .Include(w => w.WorkPayments)
                     .FirstOrDefault(w => w.Id == workId);
 
                 if (work != null)
                 {
+                    // 计算财务数据
+                    work.TotalIncome = work.WorkPayments?.Where(p => p.IsIncome).Sum(p => p.Amount) ?? 0;
+                    work.TotalExpense = work.WorkPayments?.Where(p => !p.IsIncome).Sum(p => p.Amount) ?? 0;
+                    work.Balance = work.TotalIncome - work.TotalExpense;
+
                     WorkData = work;
                 }
             }
