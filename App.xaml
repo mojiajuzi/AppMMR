@@ -18,6 +18,8 @@
             <converters:EnumDescriptionConverter x:Key="WorkStatusConverter" />
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
             <converters:BoolToIncomeTypeConverter x:Key="BoolToIncomeTypeConverter" />
+            <converters:WorkStatusToColorConverter x:Key="WorkStatusToColorConverter" />
+            <converters:ColorWithOpacityConverter x:Key="ColorWithOpacityConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

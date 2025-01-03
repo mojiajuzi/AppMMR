@@ -98,10 +98,18 @@
                                            Text="项目金额："
                                            TextColor="{StaticResource Gray600}"
                                            FontSize="14"/>
-                                    <Label Grid.Column="1"
-                                           Text="{Binding Funds, StringFormat='{0:C2}'}"
-                                           TextColor="{StaticResource Gray900}"
-                                           FontSize="14"/>
+                                    <Label Grid.Column="1">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="￥"/>
+                                                <Span Text="{Binding Funds, StringFormat='{0:N2}'}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                        <Label.TextColor>
+                                            <AppThemeBinding Light="{StaticResource Gray900}" Dark="{StaticResource White}"/>
+                                        </Label.TextColor>
+                                        <Label.FontSize>14</Label.FontSize>
+                                    </Label>
                                 </Grid>
                             </VerticalStackLayout>
 

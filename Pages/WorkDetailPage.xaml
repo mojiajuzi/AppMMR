@@ -38,16 +38,28 @@
                     </Grid>
 
                     <!-- 项目状态 -->
-                    <Border StrokeShape="RoundRectangle 20"
-                           Padding="12,6"
-                           HorizontalOptions="Start"
-                           BackgroundColor="{StaticResource Primary}"
-                           Opacity="0.1">
-                        <Label Text="{Binding WorkData.Status, Converter={StaticResource EnumDescriptionConverter}}"
-                               TextColor="{StaticResource Primary}"
-                               FontSize="12"
-                               FontAttributes="Bold"/>
-                    </Border>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.Column="0"
+                               Text="项目状态"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Border Grid.Column="1"
+                                StrokeShape="RoundRectangle 20"
+                                Padding="12,6"
+                                HorizontalOptions="Start">
+                            <Border.BackgroundColor>
+                                <MultiBinding Converter="{StaticResource ColorWithOpacityConverter}">
+                                    <Binding Path="WorkData.Status" Converter="{StaticResource WorkStatusToColorConverter}"/>
+                                    <Binding Source="0.1"/>
+                                </MultiBinding>
+                            </Border.BackgroundColor>
+                            <Label Text="{Binding WorkData.Status, Converter={StaticResource EnumDescriptionConverter}}"
+                                   TextColor="{Binding WorkData.Status, Converter={StaticResource WorkStatusToColorConverter}}"
+                                   FontSize="12"
+                                   FontAttributes="Bold"/>
+                        </Border>
+                    </Grid>
 
                     <!-- 项目金额 -->
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
@@ -56,12 +68,20 @@
                                TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
                                FontSize="14"
                                VerticalOptions="Center"/>
-                        <Label Grid.Column="1"
-                               Text="{Binding WorkData.Funds, StringFormat='{0:C}'}"
-                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
-                               FontSize="16"
-                               FontAttributes="Bold"
-                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="￥"/>
+                                    <Span Text="{Binding WorkData.Funds, StringFormat='{0:N2}'}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                            <Label.TextColor>
+                                <AppThemeBinding Light="{StaticResource Gray900}" Dark="{StaticResource White}"/>
+                            </Label.TextColor>
+                            <Label.FontSize>16</Label.FontSize>
+                            <Label.FontAttributes>Bold</Label.FontAttributes>
+                            <Label.VerticalOptions>Center</Label.VerticalOptions>
+                        </Label>
                     </Grid>
 
                     <!-- 起止时间 -->
@@ -116,30 +136,57 @@
                         <Label Text="总收入"
                                TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
                                FontSize="12"/>
-                        <Label Text="{Binding WorkData.TotalIncome, StringFormat='{0:C}'}"
-                               TextColor="{StaticResource Danger}"
-                               FontSize="16"
-                               FontAttributes="Bold"/>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="￥"/>
+                                    <Span Text="{Binding WorkData.TotalIncome, StringFormat='{0:N2}'}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                            <Label.TextColor>
+                                <StaticResource Key="Danger"/>
+                            </Label.TextColor>
+                            <Label.FontSize>16</Label.FontSize>
+                            <Label.FontAttributes>Bold</Label.FontAttributes>
+                        </Label>
                     </VerticalStackLayout>
                     
                     <VerticalStackLayout Grid.Column="1">
                         <Label Text="总支出"
                                TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
                                FontSize="12"/>
-                        <Label Text="{Binding WorkData.TotalExpense, StringFormat='{0:C}'}"
-                               TextColor="{StaticResource Success}"
-                               FontSize="16"
-                               FontAttributes="Bold"/>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="￥"/>
+                                    <Span Text="{Binding WorkData.TotalExpense, StringFormat='{0:N2}'}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                            <Label.TextColor>
+                                <StaticResource Key="Success"/>
+                            </Label.TextColor>
+                            <Label.FontSize>16</Label.FontSize>
+                            <Label.FontAttributes>Bold</Label.FontAttributes>
+                        </Label>
                     </VerticalStackLayout>
                     
                     <VerticalStackLayout Grid.Column="2">
                         <Label Text="结余"
                                TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
                                FontSize="12"/>
-                        <Label Text="{Binding WorkData.Balance, StringFormat='{0:C}'}"
-                               TextColor="{StaticResource Primary}"
-                               FontSize="16"
-                               FontAttributes="Bold"/>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="￥"/>
+                                    <Span Text="{Binding WorkData.Balance, StringFormat='{0:N2}'}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                            <Label.TextColor>
+                                <StaticResource Key="Primary"/>
+                            </Label.TextColor>
+                            <Label.FontSize>16</Label.FontSize>
+                            <Label.FontAttributes>Bold</Label.FontAttributes>
+                        </Label>
                     </VerticalStackLayout>
                 </Grid>
             </Border>
