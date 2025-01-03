@@ -11,7 +11,7 @@
         <Tab Title="首页" Icon="house.svg">
             <ShellContent ContentTemplate="{DataTemplate views:HomePage}" />
         </Tab>
-        <Tab Title="项目" Icon="list.svg">
+        <Tab Title="项目" Icon="list.svg" Route="Work">
             <ShellContent ContentTemplate="{DataTemplate views:WorkPage}"/>
         </Tab>
         <Tab Title="联系人" Icon="address_book.svg">

@@ -7,6 +7,9 @@ namespace AppMMR
         public AppShell()
         {
             InitializeComponent();
+            
+            // 注册路由
+            Routing.RegisterRoute("Work", typeof(WorkPage));
         }
     }
 }

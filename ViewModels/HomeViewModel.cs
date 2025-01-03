@@ -2,6 +2,8 @@
 using AppMMR.Models.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore;
+using CommunityToolkit.Mvvm.Input;
+using AppMMR.Pages;
 
 namespace AppMMR.ViewModels;
 
@@ -59,6 +61,31 @@ public partial class HomeViewModel : ViewModelBase
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"加载统计数据失败: {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    private async Task NavigateToWorkList(WorkStatusEnum? status = null)
+    {
+        try
+        {
+            // 先切换到项目 Tab
+            await Shell.Current.GoToAsync("//Work");
+
+            // 获取 WorkPage 的 ViewModel 并设置筛选状态
+            if (status.HasValue && Shell.Current.CurrentPage is WorkPage workPage)
+            {
+                var viewModel = workPage.BindingContext as WorkViewModel;
+                if (viewModel != null)
+                {
+                    viewModel.FilterStatus = status.Value;
+                    viewModel.LoadWorks();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"导航失败: {ex.Message}");
         }
     }
 }

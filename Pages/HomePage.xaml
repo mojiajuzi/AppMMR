@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:AppMMR.ViewModels"
              x:DataType="vm:HomeViewModel"
-             x:Class="AppMMR.Pages.HomePage">
+             x:Class="AppMMR.Pages.HomePage"
+             xmlns:enum="clr-namespace:AppMMR.Models.Enums">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
@@ -34,6 +35,10 @@
                                Padding="15"
                                HasShadow="False"
                                BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding NavigateToWorkListCommand}"
+                                                      CommandParameter="{x:Static enum:WorkStatusEnum.PreStart}"/>
+                            </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="4">
                                 <Label Text="未开始"
                                        TextColor="White"
@@ -53,6 +58,10 @@
                                Padding="15"
                                HasShadow="False"
                                BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding NavigateToWorkListCommand}"
+                                                      CommandParameter="{x:Static enum:WorkStatusEnum.InProgress}"/>
+                            </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="4">
                                 <Label Text="进行中"
                                        TextColor="White"
@@ -72,6 +81,10 @@
                                Padding="15"
                                HasShadow="False"
                                BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding NavigateToWorkListCommand}"
+                                                      CommandParameter="{x:Static enum:WorkStatusEnum.Completed}"/>
+                            </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="4">
                                 <Label Text="已完成"
                                        TextColor="White"
@@ -91,6 +104,10 @@
                                Padding="15"
                                HasShadow="False"
                                BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding NavigateToWorkListCommand}"
+                                                      CommandParameter="{x:Static enum:WorkStatusEnum.Cancelled}"/>
+                            </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="4">
                                 <Label Text="已取消"
                                        TextColor="White"

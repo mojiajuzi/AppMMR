@@ -1,28 +1,33 @@
 ﻿using AppMMR.Entities;
 using AppMMR.Models;
+using AppMMR.Models.Enums;
 using AppMMR.Pages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace AppMMR.ViewModels
 {
-    public partial class WorkViewModel : ViewModelBase
+    public partial class WorkViewModel : ViewModelBase, IQueryAttributable
     {
         private INavigation Navigation => Application.Current?.MainPage?.Navigation;
         private readonly IServiceProvider _serviceProvider;
         private readonly AppDbContext _dbContext;
 
         [ObservableProperty]
-        private ObservableCollection<WorkModel> works;
+        private ObservableCollection<WorkModel> works = new();
 
         [ObservableProperty]
-        private ObservableCollection<WorkModel> searchResults = [];
+        private ObservableCollection<WorkModel> searchResults = new();
 
         [ObservableProperty]
         private string? searchText = string.Empty;
+
+        [ObservableProperty]
+        private WorkStatusEnum? filterStatus;
 
         public WorkViewModel(IServiceProvider serviceProvider, AppDbContext appDbContext)
         {
@@ -35,21 +40,37 @@ namespace AppMMR.ViewModels
         {
             try
             {
-                var workList = _dbContext.Works
-                    .AsNoTracking()
+                if (Works == null)
+                {
+                    Works = new ObservableCollection<WorkModel>();
+                }
+
+                var query = _dbContext.Works.AsNoTracking();
+
+                if (FilterStatus.HasValue)
+                {
+                    query = query.Where(w => w.Status == FilterStatus.Value);
+                }
+
+                var works = query
                     .Include(w => w.WorkTags)
-                        .ThenInclude(wt => wt.Tag)
-                    .Include(w => w.WorkContacts)
-                        .ThenInclude(wc => wc.Contact)
-                    .OrderByDescending(w => w.StartAt)
+                    .ThenInclude(wt => wt.Tag)
+                    .OrderByDescending(w => w.DateModified)
                     .ToList();
 
-                Works = new ObservableCollection<WorkModel>(workList);
-                SearchResults = Works;
+                Works.Clear();
+                foreach (var work in works)
+                {
+                    Works.Add(work);
+                }
+
+                SearchResults = new ObservableCollection<WorkModel>(Works);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"加载项目失败: {ex.Message}");
+                Debug.WriteLine($"加载项目列表失败: {ex.Message}");
+                Works ??= new ObservableCollection<WorkModel>();
+                SearchResults ??= new ObservableCollection<WorkModel>();
             }
         }
 
@@ -149,6 +170,13 @@ namespace AppMMR.ViewModels
             }
         }
 
-
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            if (query.TryGetValue("FilterStatus", out var status))
+            {
+                FilterStatus = (WorkStatusEnum)status;
+                LoadWorks(); // 重新加载并筛选数据
+            }
+        }
     }
 }
