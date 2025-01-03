@@ -41,9 +41,13 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<WorkModel> recentWorks;
 
-    public HomeViewModel(AppDbContext dbContext)
+            private INavigation Navigation => Application.Current?.MainPage?.Navigation;
+        private readonly IServiceProvider _serviceProvider;
+
+    public HomeViewModel(AppDbContext dbContext, IServiceProvider serviceProvider)
     {
         _dbContext = dbContext;
+        _serviceProvider = serviceProvider;
         RecentWorks = new ObservableCollection<WorkModel>();
         LoadStatistics();
     }
@@ -114,10 +118,19 @@ public partial class HomeViewModel : ViewModelBase
     {
         if (work == null) return;
 
-        var parameters = new Dictionary<string, object>
-        {
-            { "WorkId", work.Id }
-        };
-        await Shell.Current.GoToAsync("WorkDetail", parameters);
+            try
+            {
+                var page = _serviceProvider.GetRequiredService<WorkTabPage>();
+                var viewModel = page.BindingContext as WorkTabViewModel;
+                if (viewModel != null)
+                {
+                    viewModel.LoadWork(work);
+                }
+                await Navigation.PushModalAsync(page);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"导航失败: {ex.Message}");
+            }
     }
 }

@@ -158,10 +158,7 @@ namespace AppMMR.ViewModels
             {
                 var page = _serviceProvider.GetRequiredService<WorkTabPage>();
                 var viewModel = page.BindingContext as WorkTabViewModel;
-                if (viewModel != null)
-                {
-                    viewModel.LoadWork(work);
-                }
+                viewModel?.LoadWork(work);
                 await Navigation.PushModalAsync(page);
             }
             catch (Exception ex)
